@@ -640,7 +640,7 @@ PRODUCTS = [
         "sku": "KT-S828 Silver",
         "slug": "kt-s828-silver",
         "brand": "Mini-Split Control Wireless",
-        "image": "KT-S828 Silver.jpg",
+        "image": "KT-S828-Silver.jpg",
         "features": [],
         "description": "Mini Split Universal Remote. 2000 codes. Large Display. Deg C or F.",
         "docs": [{"label": "Download", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_9794f3a4fde9413d8ee0796800d22bcd.pdf"}],
