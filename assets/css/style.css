@@ -748,7 +748,7 @@ a { color: inherit; text-decoration: none; }
 .product-thumb {
   position: relative;
   aspect-ratio: 1 / 1;
-  background: linear-gradient(155deg, #f4f6f8, #e7ebef);
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
