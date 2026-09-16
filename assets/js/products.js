@@ -51,13 +51,16 @@ document.addEventListener("DOMContentLoaded", function () {
         var detail = (window.VTRONIX_PRODUCT_DETAILS || {})[p.sku];
         var tag = detail ? "a" : "div";
         var href = detail ? ' href="products/' + detail.slug + '.html"' : "";
+        var media = detail && detail.image
+          ? '<img src="' + detail.image + '" alt="' + p.sku + ' product photo" loading="lazy" />'
+          : icon;
         return (
           "<" + tag + ' class="product-card"' + href + ">" +
           '<div class="product-thumb">' +
           '<span class="product-tag' + (p.discontinued ? " discontinued" : "") + '">' +
           p.brand +
           "</span>" +
-          icon +
+          media +
           "</div>" +
           '<div class="product-info">' +
           '<div class="sku">' + p.sku + (p.discontinued ? " (Discontinued)" : "") + "</div>" +

@@ -758,6 +758,9 @@ a { color: inherit; text-decoration: none; }
 .product-thumb svg { width: 42%; height: 42%; opacity: 0.5; stroke: #5b6b78; transition: opacity var(--dur) var(--ease), stroke var(--dur) var(--ease), transform 0.5s var(--ease); }
 .product-card:hover .product-thumb svg { opacity: 0.85; stroke: var(--blue-dim); transform: scale(1.06); }
 
+.product-thumb img { width: 78%; height: 78%; object-fit: contain; transition: transform 0.5s var(--ease); }
+.product-card:hover .product-thumb img { transform: scale(1.06); }
+
 .product-tag {
   position: absolute;
   top: 0;
