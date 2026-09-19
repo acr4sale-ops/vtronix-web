@@ -15,6 +15,13 @@ document.addEventListener("DOMContentLoaded", function () {
     categoryLabels[c.slug] = c.label;
   });
 
+  var productsBySku = {};
+  VTRONIX_PRODUCTS.forEach(function (p) {
+    productsBySku[p.sku] = p;
+  });
+
+  var categoryOrder = window.VTRONIX_CATEGORY_ORDER || {};
+
   function setActiveCategoryLink() {
     catLinks.forEach(function (a) {
       a.classList.toggle("active", a.dataset.cat === activeCat);
@@ -37,11 +44,17 @@ document.addEventListener("DOMContentLoaded", function () {
     return !q || p.sku.toLowerCase().indexOf(q) !== -1 || p.brand.toLowerCase().indexOf(q) !== -1;
   }
 
+  function productsInCategory(cat) {
+    return (categoryOrder[cat] || [])
+      .map(function (sku) {
+        return productsBySku[sku];
+      })
+      .filter(Boolean);
+  }
+
   function filterByCategory(cat, q) {
-    return VTRONIX_PRODUCTS.filter(function (p) {
-      var matchesCat =
-        cat === "all-products" || (cat === "discontinued-items" ? p.discontinued : p.category === cat);
-      return matchesCat && matchesQuery(p, q);
+    return productsInCategory(cat).filter(function (p) {
+      return matchesQuery(p, q);
     });
   }
 
@@ -103,7 +116,12 @@ document.addEventListener("DOMContentLoaded", function () {
       if (allMatches.length > 0) {
         var cats = [];
         allMatches.forEach(function (p) {
-          if (cats.indexOf(p.category) === -1) cats.push(p.category);
+          VTRONIX_CATEGORIES.forEach(function (c) {
+            if (c.slug === "all-products" || c.slug === "discontinued-items") return;
+            if ((categoryOrder[c.slug] || []).indexOf(p.sku) !== -1 && cats.indexOf(c.slug) === -1) {
+              cats.push(c.slug);
+            }
+          });
         });
 
         var fromLabel = categoryLabels[activeCat] || activeCat;
