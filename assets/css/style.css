@@ -806,18 +806,24 @@ a { color: inherit; text-decoration: none; }
 /* ---------- About page ---------- */
 
 .about-facility-section {
-  padding-top: 0;
-  padding-bottom: clamp(52px, 7vw, 92px);
+  padding: 0;
+  overflow: visible;
+}
+
+.about-facility-section .wrap {
+  max-width: none;
+  padding: 0;
 }
 
 .about-facility-photo {
   position: relative;
   margin: 0;
   overflow: hidden;
-  border: 1px solid var(--gray-line-soft);
-  border-radius: 10px;
+  width: 100%;
+  border: 0;
+  border-radius: 0;
   background: #0d1115;
-  box-shadow: 0 24px 54px -28px rgba(0, 0, 0, 0.6);
+  box-shadow: none;
 }
 
 .about-facility-photo::after {
@@ -830,14 +836,11 @@ a { color: inherit; text-decoration: none; }
 
 .about-facility-photo img {
   width: 100%;
-  aspect-ratio: 2.21 / 1;
-  object-fit: cover;
-  object-position: center;
+  height: auto;
 }
 
 @media (max-width: 620px) {
-  .about-facility-photo { border-radius: 6px; }
-  .about-facility-photo img { aspect-ratio: 1.45 / 1; }
+  .about-facility-photo img { min-height: 310px; object-fit: cover; object-position: 42% center; }
 }
 
 .pagination {
