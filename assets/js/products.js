@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var tag = detail ? "a" : "div";
         var href = detail ? ' href="products/' + detail.slug + '.html"' : "";
         var media = detail && detail.image
-          ? '<img src="' + detail.image + '" alt="' + p.sku + ' product photo" loading="lazy" />'
+          ? '<img src="' + detail.image + '" alt="' + p.sku + ' product photo" loading="lazy" decoding="async" />'
           : icon;
         return (
           "<" + tag + ' class="product-card"' + href + ">" +
