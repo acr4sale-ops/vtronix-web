@@ -53,6 +53,40 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  /* Scroll-driven parallax for the about facility photo */
+  var parallaxPhoto = document.querySelector(".about-facility-photo");
+  var parallaxLayer = document.querySelector(".about-facility-parallax");
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var isNarrow = window.matchMedia("(max-width: 620px)");
+
+  if (parallaxPhoto && parallaxLayer && !reduceMotion) {
+    var parallaxTicking = false;
+
+    var updateParallax = function () {
+      parallaxTicking = false;
+      if (isNarrow.matches) {
+        parallaxLayer.style.transform = "";
+        return;
+      }
+      var rect = parallaxPhoto.getBoundingClientRect();
+      var viewportH = window.innerHeight || document.documentElement.clientHeight;
+      var progress = (viewportH - rect.top) / (viewportH + rect.height);
+      var offset = (progress - 0.5) * rect.height * 0.3;
+      parallaxLayer.style.transform = "translateY(" + offset + "px)";
+    };
+
+    var onParallaxScroll = function () {
+      if (!parallaxTicking) {
+        parallaxTicking = true;
+        window.requestAnimationFrame(updateParallax);
+      }
+    };
+
+    updateParallax();
+    window.addEventListener("scroll", onParallaxScroll, { passive: true });
+    window.addEventListener("resize", onParallaxScroll);
+  }
+
   var form = document.getElementById("contactForm");
   if (form) {
     var note = form.querySelector(".form-note");

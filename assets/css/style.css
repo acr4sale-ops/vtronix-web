@@ -819,6 +819,7 @@ a { color: inherit; text-decoration: none; }
   margin: 0;
   overflow: hidden;
   width: 100%;
+  height: clamp(430px, 48vw, 760px);
   border: 0;
   border-radius: 0;
   background: #0d1115;
@@ -831,20 +832,29 @@ a { color: inherit; text-decoration: none; }
   inset: 0;
   pointer-events: none;
   background: linear-gradient(120deg, rgba(74, 155, 220, 0.12), transparent 32%, rgba(0, 0, 0, 0.08));
+  z-index: 1;
 }
 
 .about-facility-parallax {
+  position: absolute;
+  left: 0;
+  top: -15%;
   width: 100%;
-  height: clamp(430px, 48vw, 760px);
+  height: 130%;
   background: url("../img/about-facility.jpg") center center / cover no-repeat;
-  background-attachment: fixed;
+  will-change: transform;
 }
 
 @media (max-width: 620px) {
-  .about-facility-parallax {
+  .about-facility-photo {
     height: 340px;
+  }
+
+  .about-facility-parallax {
+    top: 0;
+    height: 100%;
     background-position: 42% center;
-    background-attachment: scroll;
+    transform: none !important;
   }
 }
 
