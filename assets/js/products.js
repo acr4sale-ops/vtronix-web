@@ -24,6 +24,9 @@ document.addEventListener("DOMContentLoaded", function () {
   var categoryOrder = window.VTRONIX_CATEGORY_ORDER || {};
   var brandFilter = "all";
   var brandButtons = document.querySelectorAll(".filter-toggle button");
+  var paginationEl = document.getElementById("pagination");
+  var PAGE_SIZE = 20;
+  var currentPage = 1;
 
   function isHoneywell(p) {
     return p.brand === "Honeywell";
@@ -43,6 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function setCategory(cat) {
     activeCat = cat;
+    currentPage = 1;
     window.history.replaceState({}, "", "/category/" + activeCat);
     setActiveCategoryLink();
   }
@@ -96,6 +100,30 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  function renderPagination(total) {
+    var totalPages = Math.ceil(total / PAGE_SIZE);
+    if (totalPages <= 1) {
+      paginationEl.innerHTML = "";
+      return;
+    }
+    if (currentPage > totalPages) currentPage = totalPages;
+    var links = [];
+    for (var i = 1; i <= totalPages; i++) {
+      links.push(
+        '<a href="#" data-page="' + i + '"' + (i === currentPage ? ' class="current"' : "") + ">" + i + "</a>"
+      );
+    }
+    paginationEl.innerHTML = links.join("");
+    paginationEl.querySelectorAll("a").forEach(function (a) {
+      a.addEventListener("click", function (e) {
+        e.preventDefault();
+        currentPage = parseInt(a.getAttribute("data-page"), 10);
+        render();
+        grid.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+  }
+
   // Live filtering within the currently selected category. No category switching here —
   // that only happens on an explicit search (Enter / search button), see performSearch().
   function render(items, note) {
@@ -105,7 +133,9 @@ document.addEventListener("DOMContentLoaded", function () {
       countText += ' <span style="color:var(--blue-dim); font-weight:600;">— ' + note + "</span>";
     }
     countEl.innerHTML = countText;
-    renderCards(items);
+    var start = (currentPage - 1) * PAGE_SIZE;
+    renderCards(items.slice(start, start + PAGE_SIZE));
+    renderPagination(items.length);
   }
 
   function currentQuery() {
@@ -145,6 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
   brandButtons.forEach(function (btn) {
     btn.addEventListener("click", function () {
       brandFilter = btn.getAttribute("data-brand");
+      currentPage = 1;
       brandButtons.forEach(function (b) { b.classList.toggle("active", b === btn); });
       render();
     });
@@ -159,6 +190,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   searchInput.addEventListener("input", function () {
+    currentPage = 1;
     render();
   });
 
