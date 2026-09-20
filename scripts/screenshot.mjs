@@ -8,8 +8,14 @@ const pages = [
   ['/factory.html', 'factory'],
   ['/about.html', 'about'],
   ['/links.html', 'links'],
-  ['/contact.html', 'contact-us'],
+  ['/contact-us.html', 'contact-us'],
   ['/products.html', 'all-products'],
+  ['/products.html?cat=control-boards', 'category-control-boards'],
+  ['/products/w100-1.html', 'product-detail'],
+  ['/custom-controls.html', 'custom-controls'],
+  ['/applications.html', 'applications'],
+  ['/documentation.html', 'documentation'],
+  ['/request-a-quote.html', 'request-a-quote'],
 ];
 const widths = [1440, 390];
 

@@ -1050,12 +1050,13 @@ TEMPLATE = """<!doctype html>
   <div class="wrap">
     <a href="/" class="logo"><img src="/assets/img/logo.png" alt="Vtronix" /></a>
     <nav class="main-nav">
-      <a href="/">Home</a>
-      <a href="/factory">Factory</a>
-      <a href="/about">About Us</a>
+      <a href="/custom-controls">Custom Controls</a>
       <a href="/category/all-products" class="active">Products</a>
-      <a href="/links">Links</a>
-      <a href="/contact-us">Contact Us</a>
+      <a href="/applications">Applications</a>
+      <a href="/factory">Manufacturing</a>
+      <a href="/about">About</a>
+      <a href="/documentation">Documentation</a>
+      <a class="nav-cta" href="/request-a-quote">Request a Quote</a>
     </nav>
     <button class="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
   </div>
@@ -1089,7 +1090,7 @@ TEMPLATE = """<!doctype html>
 
 {docs}
 
-          <a class="btn btn-light" href="/contact-us"><span>Request a Quote</span><span class="arrow">&rarr;</span></a>
+          <a class="btn btn-light" href="/request-a-quote"><span>Request a Quote</span><span class="arrow">&rarr;</span></a>
         </div>
       </div>
     </div>
