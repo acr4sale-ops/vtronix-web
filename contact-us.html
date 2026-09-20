@@ -4,11 +4,14 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Contact Us | Vtronix</title>
+<meta name="description" content="Contact Vtronix for custom projects, product questions, technical support or order status." />
+<link rel="canonical" href="https://www.vtronix.com/contact-us" />
 <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/assets/css/style.css" />
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Vtronix", "url": "https://www.vtronix.com", "foundingDate": "2001", "logo": "https://www.vtronix.com/assets/img/logo.png", "address": {"@type": "PostalAddress", "postOfficeBoxNumber": "267096", "addressLocality": "Weston", "addressRegion": "FL", "postalCode": "33326", "addressCountry": "US"}, "contactPoint": {"@type": "ContactPoint", "telephone": "+1-305-471-7600", "email": "sales@vtronix.com", "contactType": "sales"}}</script>
 </head>
 <body>
 
@@ -42,10 +45,19 @@
       <div>
         <p class="eyebrow" style="text-align:right;">Please fill out the form below:</p>
         <div class="contact-form">
-          <form id="contactForm" action="https://formsubmit.co/sales@vtronix.com" method="POST">
+          <form id="contactForm" data-ajax-form action="https://formsubmit.co/sales@vtronix.com" method="POST">
             <input type="hidden" name="_subject" value="New message from the Vtronix website" />
             <input type="hidden" name="_template" value="table" />
             <input type="hidden" name="_captcha" value="false" />
+            <label for="about">What is this about?</label>
+            <select id="about" name="topic" class="field-select" style="margin-bottom:6px;">
+              <option value="">Select one</option>
+              <option value="Custom project" data-redirect="/request-a-quote">Custom project</option>
+              <option value="Product question">Product question</option>
+              <option value="Technical support">Technical support</option>
+              <option value="Order status">Order status</option>
+              <option value="Other">Other</option>
+            </select>
             <div class="field-row">
               <div>
                 <label for="fname">First Name</label>
@@ -76,6 +88,9 @@
         <p>E: <a href="mailto:sales@vtronix.com">sales@vtronix.com</a></p>
         <p>T: <a href="tel:+13054717600">+1-305-471-7600</a></p>
         <p>F: +1-305-471-9787</p>
+        <p class="confirm" style="display:inline-block; margin-top:6px;">[CONFIRM: phone hours]</p>
+        <p style="margin-top:24px;" class="eyebrow">Miami Gardens Operations</p>
+        <p>Warehouse and operations, Miami Gardens, Florida. <span class="confirm">[CONFIRM: a direct operations line, if different from the main number]</span></p>
         <p style="margin-top:24px;" class="eyebrow">Mailing Address</p>
         <p>PO Box 267096<br />Weston, FL 33326</p>
       </div>
@@ -89,13 +104,18 @@
     <div>
       <div class="footer-brand">VTRONIX<span class="reg">&reg;</span></div>
       <p>PO Box 267096,<br />Weston FL 33326</p>
+      <p style="margin-top:10px;">Miami Gardens, Florida<br />Operations and warehouse</p>
       <p><a href="mailto:sales@vtronix.com">sales@vtronix.com</a></p>
       <p><a href="tel:3054717600">305-471-7600</a></p>
     </div>
     <div>
       <h4>General</h4>
+      <a href="/custom-controls">Custom Controls</a>
+      <a href="/capabilities">Capabilities</a>
       <a href="/about">About</a>
       <a href="/factory">Factory</a>
+      <a href="/brands">Our Brands</a>
+      <a href="/certifications">Certifications</a>
       <a href="/links">Links</a>
       <a href="/contact-us">Contact Us</a>
     </div>
@@ -112,6 +132,13 @@
       <a href="/category/energy-savings">Energy Savings</a>
       <a href="/category/temperature-controls">Temperature Controls</a>
       <a href="/category/all-products">All Products</a>
+    </div>
+    <div>
+      <h4>Legal</h4>
+      <a href="/warranty-returns">Warranty and Returns</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+      <a href="/accessibility">Accessibility</a>
     </div>
   </div>
 </footer>

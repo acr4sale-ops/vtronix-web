@@ -22,6 +22,18 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   var categoryOrder = window.VTRONIX_CATEGORY_ORDER || {};
+  var brandFilter = "all";
+  var brandButtons = document.querySelectorAll(".filter-toggle button");
+
+  function isHoneywell(p) {
+    return p.brand === "Honeywell";
+  }
+
+  function matchesBrandFilter(p) {
+    if (brandFilter === "vtronix") return !isHoneywell(p);
+    if (brandFilter === "honeywell") return isHoneywell(p);
+    return true;
+  }
 
   function setActiveCategoryLink() {
     catLinks.forEach(function (a) {
@@ -49,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function filterByCategory(cat, q) {
     return productsInCategory(cat).filter(function (p) {
-      return matchesQuery(p, q);
+      return matchesQuery(p, q) && matchesBrandFilter(p);
     });
   }
 
@@ -63,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
           ? '<img src="' + detail.image + '" alt="' + p.sku + ' product photo" loading="lazy" decoding="async" />'
           : icon;
         return (
-          "<" + tag + ' class="product-card"' + href + ">" +
+          "<" + tag + ' class="product-card' + (isHoneywell(p) ? " product-card--resale" : "") + '"' + href + ">" +
           '<div class="product-thumb">' +
           '<span class="product-tag' + (p.discontinued ? " discontinued" : "") + '">' +
           p.brand +
@@ -129,6 +141,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     render(items);
   }
+
+  brandButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      brandFilter = btn.getAttribute("data-brand");
+      brandButtons.forEach(function (b) { b.classList.toggle("active", b === btn); });
+      render();
+    });
+  });
 
   catLinks.forEach(function (a) {
     a.addEventListener("click", function (e) {

@@ -1,1 +1,179 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Request a Quote | Vtronix</title><meta name="description" content="Request a Vtronix custom controls or catalog product quote."><link rel="stylesheet" href="/assets/css/style.css"></head><body><header class="site-header"><div class="wrap"><a href="/" class="logo"><img src="/assets/img/logo.png" alt="Vtronix"></a><nav class="main-nav"><a href="/custom-controls">Custom Controls</a><a href="/category/all-products">Products</a><a href="/applications">Applications</a><a href="/factory">Manufacturing</a><a href="/about">About</a><a href="/documentation">Documentation</a><a class="nav-cta" href="/request-a-quote">Request a Quote</a></nav><button class="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button></div></header><main><section class="section"><div class="wrap accent-block"><p class="eyebrow">Request a quote</p><h1 class="h1">Tell us about your application.</h1><p class="lead">For a custom control, catalog product question or technical support request, contact our team and we will follow up with the next steps.</p><p><a class="btn btn-solid" href="/contact-us"><span>Contact Vtronix</span><span class="arrow">→</span></a></p><p class="confirm-note">[CONFIRM: quote-form response-time commitment and file-upload workflow]</p></div></section></main><script src="/assets/js/main.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Request a Quote | Vtronix</title>
+<meta name="description" content="Request a quote for a custom HVAC control project or a catalog product from Vtronix." />
+<link rel="canonical" href="https://www.vtronix.com/request-a-quote" />
+<link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/css/style.css" />
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Vtronix", "url": "https://www.vtronix.com", "foundingDate": "2001", "logo": "https://www.vtronix.com/assets/img/logo.png", "address": {"@type": "PostalAddress", "postOfficeBoxNumber": "267096", "addressLocality": "Weston", "addressRegion": "FL", "postalCode": "33326", "addressCountry": "US"}, "contactPoint": {"@type": "ContactPoint", "telephone": "+1-305-471-7600", "email": "sales@vtronix.com", "contactType": "sales"}}</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="/" class="logo"><img src="/assets/img/logo.png" alt="Vtronix" /></a>
+    <nav class="main-nav">
+      <a href="/custom-controls">Custom Controls</a>
+      <a href="/category/all-products">Products</a>
+      <a href="/applications">Applications</a>
+      <a href="/factory">Manufacturing</a>
+      <a href="/about">About</a>
+      <a href="/documentation">Documentation</a>
+      <a class="nav-cta" href="/request-a-quote">Request a Quote</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main>
+
+  <section class="section-tight">
+    <div class="wrap accent-block">
+      <p class="eyebrow">Request a quote</p>
+      <h1 class="h1">Tell us about your application.</h1>
+      <p class="lead">Choose custom project or catalog product below. We reply within <span class="confirm">[CONFIRM: for example one business day]</span>.</p>
+    </div>
+  </section>
+
+  <section class="section-tight" style="border-top:1px solid var(--gray-line-soft);">
+    <div class="wrap" style="max-width:760px;">
+
+      <div class="tabs-nav">
+        <button type="button" class="active" data-tab="tab-custom">Custom project</button>
+        <button type="button" data-tab="tab-catalog">Catalog product</button>
+      </div>
+
+      <div class="tab-panel active" id="tab-custom">
+        <form data-ajax-form data-success-message="Thanks — your project details are with our engineering team. We reply within one business day." action="https://formsubmit.co/sales@vtronix.com" method="POST" enctype="multipart/form-data" class="contact-form" style="background:#eef0f2; padding:32px; border-radius:4px;">
+          <input type="hidden" name="_subject" value="New custom project quote request" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="form_type" value="Custom project" />
+
+          <div class="field-row">
+            <div><label for="cp-company">Company</label><input type="text" id="cp-company" name="company" required /></div>
+            <div><label for="cp-name">Name</label><input type="text" id="cp-name" name="name" required /></div>
+          </div>
+          <div class="field-row">
+            <div><label for="cp-email">Email *</label><input type="email" id="cp-email" name="email" required /></div>
+            <div><label for="cp-phone">Phone</label><input type="tel" id="cp-phone" name="phone" /></div>
+          </div>
+
+          <label for="cp-equipment">Equipment type</label>
+          <input type="text" id="cp-equipment" name="equipment_type" placeholder="e.g. rooftop unit, fan coil, mini split" />
+
+          <label for="cp-need">What must the control do?</label>
+          <textarea id="cp-need" name="control_requirements" style="min-height:100px;"></textarea>
+
+          <div class="field-row">
+            <div><label for="cp-voltage">Supply voltage</label><input type="text" id="cp-voltage" name="supply_voltage" /></div>
+            <div><label for="cp-approvals">Approvals needed</label><input type="text" id="cp-approvals" name="approvals_needed" placeholder="UL, CSA, ETL, FCC, CE" /></div>
+          </div>
+
+          <label for="cp-volume">Estimated annual volume</label>
+          <select id="cp-volume" name="annual_volume" class="field-select" style="margin-bottom:6px;">
+            <option value="">Select a range</option>
+            <option>Under 1,000 units</option>
+            <option>1,000 - 10,000 units</option>
+            <option>10,000 - 50,000 units</option>
+            <option>50,000+ units</option>
+          </select>
+
+          <label for="cp-date">Target date</label>
+          <input type="text" id="cp-date" name="target_date" placeholder="e.g. Q3 2026" />
+
+          <label for="cp-file">Drawings or specifications (optional)</label>
+          <input type="file" id="cp-file" name="attachment" style="margin:6px 0 4px; font-size:14px;" />
+
+          <label style="margin-top:14px;">NDA requested?</label>
+          <div class="radio-row">
+            <label><input type="radio" name="nda_requested" value="Yes" /> Yes</label>
+            <label><input type="radio" name="nda_requested" value="No" /> No</label>
+          </div>
+
+          <button type="submit" class="send-btn" style="margin-top:20px;">Send</button>
+          <p class="form-note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <div class="tab-panel" id="tab-catalog">
+        <form data-ajax-form data-success-message="Thanks — your quote request is with our sales team. We reply within one business day." action="https://formsubmit.co/sales@vtronix.com" method="POST" class="contact-form" style="background:#eef0f2; padding:32px; border-radius:4px;">
+          <input type="hidden" name="_subject" value="New catalog product quote request" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="form_type" value="Catalog product" />
+
+          <label for="cat-model">Model number</label>
+          <input type="text" id="cat-model" name="model_number" required />
+
+          <div class="field-row">
+            <div><label for="cat-qty">Quantity</label><input type="number" id="cat-qty" name="quantity" min="1" required /></div>
+            <div><label for="cat-ship">Ship-to state or country</label><input type="text" id="cat-ship" name="ship_to" required /></div>
+          </div>
+
+          <label for="cat-email">Email *</label>
+          <input type="email" id="cat-email" name="email" required />
+
+          <button type="submit" class="send-btn" style="margin-top:20px;">Send</button>
+          <p class="form-note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div>
+      <div class="footer-brand">VTRONIX<span class="reg">&reg;</span></div>
+      <p>PO Box 267096,<br />Weston FL 33326</p>
+      <p style="margin-top:10px;">Miami Gardens, Florida<br />Operations and warehouse</p>
+      <p><a href="mailto:sales@vtronix.com">sales@vtronix.com</a></p>
+      <p><a href="tel:3054717600">305-471-7600</a></p>
+    </div>
+    <div>
+      <h4>General</h4>
+      <a href="/custom-controls">Custom Controls</a>
+      <a href="/capabilities">Capabilities</a>
+      <a href="/about">About</a>
+      <a href="/factory">Factory</a>
+      <a href="/brands">Our Brands</a>
+      <a href="/certifications">Certifications</a>
+      <a href="/links">Links</a>
+      <a href="/contact-us">Contact Us</a>
+    </div>
+    <div>
+      <h4>Products</h4>
+      <a href="/category/control-boards">Control Boards</a>
+      <a href="/category/residential-thermostats">Residential Thermostats</a>
+      <a href="/category/commercial-thermostats">Commercial Thermostats</a>
+      <a href="/category/fan-coil-thermostats">Fan Coil Thermostats</a>
+    </div>
+    <div>
+      <h4>&nbsp;</h4>
+      <a href="/category/mini-split-controls">Mini Split Controls</a>
+      <a href="/category/energy-savings">Energy Savings</a>
+      <a href="/category/temperature-controls">Temperature Controls</a>
+      <a href="/category/all-products">All Products</a>
+    </div>
+    <div>
+      <h4>Legal</h4>
+      <a href="/warranty-returns">Warranty and Returns</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+      <a href="/accessibility">Accessibility</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/main.js"></script>
+</body>
+</html>

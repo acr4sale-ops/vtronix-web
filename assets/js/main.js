@@ -87,8 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener("resize", onParallaxScroll);
   }
 
-  var form = document.getElementById("contactForm");
-  if (form) {
+  function wireAjaxForm(form, successMessage) {
     var note = form.querySelector(".form-note");
     var button = form.querySelector(".send-btn");
 
@@ -117,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
           return res.json();
         })
         .then(function () {
-          note.textContent = "Thanks — your message has been sent to our team. We'll get back to you soon.";
+          note.textContent = successMessage;
           note.classList.add("show");
           form.reset();
         })
@@ -129,6 +128,33 @@ document.addEventListener("DOMContentLoaded", function () {
           button.disabled = false;
           button.textContent = originalLabel;
         });
+    });
+  }
+
+  var topicSelect = document.getElementById("about");
+  if (topicSelect) {
+    topicSelect.addEventListener("change", function () {
+      var opt = topicSelect.options[topicSelect.selectedIndex];
+      var redirect = opt && opt.getAttribute("data-redirect");
+      if (redirect) window.location.href = redirect;
+    });
+  }
+
+  document.querySelectorAll("form[data-ajax-form]").forEach(function (form) {
+    wireAjaxForm(form, form.getAttribute("data-success-message") || "Thanks — your message has been sent to our team. We'll get back to you soon.");
+  });
+
+  // Request a Quote: two tabs, one active form at a time.
+  var tabButtons = document.querySelectorAll(".tabs-nav button");
+  if (tabButtons.length) {
+    tabButtons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var target = btn.getAttribute("data-tab");
+        tabButtons.forEach(function (b) { b.classList.toggle("active", b === btn); });
+        document.querySelectorAll(".tab-panel").forEach(function (panel) {
+          panel.classList.toggle("active", panel.id === target);
+        });
+      });
     });
   }
 });

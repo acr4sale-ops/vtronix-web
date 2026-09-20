@@ -16,18 +16,24 @@ with open(GEN_PATH) as f:
 PRODUCTS = ns["PRODUCTS"]
 CATEGORIES = ns["CATEGORIES"]
 
-# Phase 1: only pages with real, launch-ready content. New V2 pages (Custom
-# Controls, Applications, Capabilities, Brands, Certifications, Documentation,
-# Request a Quote, and the legal shells) get added here as each later phase
-# gives them real copy — see the addendum's phase plan. Listing a thin stub
-# in the sitemap before it has content would be worse for SEO than leaving
-# it out.
+# Pages with real content, even where a section still carries a [CONFIRM]
+# note. Certifications and the 4 legal pages are excluded on purpose: they
+# are pure placeholder shells today (noindex is set on those pages too) and
+# don't belong in the sitemap until real text replaces every [CONFIRM].
 STATIC_PAGES = [
     "/", "/factory", "/about", "/links", "/contact-us",
+    "/custom-controls", "/capabilities", "/brands", "/applications",
+    "/documentation", "/request-a-quote",
+]
+
+APPLICATION_SLUGS = [
+    "air-handlers", "fan-coil-units", "water-source-heat-pumps",
+    "mini-splits", "ecm-motor-control", "energy-savings",
 ]
 
 urls = []
 urls.extend(STATIC_PAGES)
+urls.extend("/applications/" + slug for slug in APPLICATION_SLUGS)
 urls.extend("/category/" + slug for slug, _ in CATEGORIES)
 urls.extend("/product-page/" + p["slug"] for p in PRODUCTS)
 

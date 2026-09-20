@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/assets/css/style.css" />
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Vtronix", "url": "https://www.vtronix.com", "foundingDate": "2001", "logo": "https://www.vtronix.com/assets/img/logo.png", "address": {"@type": "PostalAddress", "postOfficeBoxNumber": "267096", "addressLocality": "Weston", "addressRegion": "FL", "postalCode": "33326", "addressCountry": "US"}, "contactPoint": {"@type": "ContactPoint", "telephone": "+1-305-471-7600", "email": "sales@vtronix.com", "contactType": "sales"}}</script>
 </head>
 <body class="section-white" style="background:#fff;">
 
@@ -51,7 +52,12 @@
         <input type="text" id="productSearch" placeholder="Enter search term" />
         <button id="searchBtn" aria-label="Search">&#128269;</button>
       </div>
-      <p id="resultCount" style="color:#777; font-size:14px; margin:-18px 0 20px;"></p>
+      <div class="filter-toggle">
+        <button type="button" class="active" data-brand="all">All</button>
+        <button type="button" data-brand="vtronix">Vtronix designs</button>
+        <button type="button" data-brand="honeywell">Honeywell</button>
+      </div>
+      <p id="resultCount" style="color:#777; font-size:14px; margin:0 0 20px;"></p>
 
       <div class="product-grid" id="productGrid"></div>
     </div>
@@ -64,13 +70,18 @@
     <div>
       <div class="footer-brand">VTRONIX<span class="reg">&reg;</span></div>
       <p>PO Box 267096,<br />Weston FL 33326</p>
+      <p style="margin-top:10px;">Miami Gardens, Florida<br />Operations and warehouse</p>
       <p><a href="mailto:sales@vtronix.com">sales@vtronix.com</a></p>
       <p><a href="tel:3054717600">305-471-7600</a></p>
     </div>
     <div>
       <h4>General</h4>
+      <a href="/custom-controls">Custom Controls</a>
+      <a href="/capabilities">Capabilities</a>
       <a href="/about">About</a>
       <a href="/factory">Factory</a>
+      <a href="/brands">Our Brands</a>
+      <a href="/certifications">Certifications</a>
       <a href="/links">Links</a>
       <a href="/contact-us">Contact Us</a>
     </div>
@@ -87,6 +98,13 @@
       <a href="/category/energy-savings">Energy Savings</a>
       <a href="/category/temperature-controls">Temperature Controls</a>
       <a href="/category/all-products">All Products</a>
+    </div>
+    <div>
+      <h4>Legal</h4>
+      <a href="/warranty-returns">Warranty and Returns</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+      <a href="/accessibility">Accessibility</a>
     </div>
   </div>
 </footer>

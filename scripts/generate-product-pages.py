@@ -3,6 +3,7 @@
 Generates static product detail pages under products/<slug>.html from PRODUCTS below.
 Run from anywhere: python3 scripts/generate-product-pages.py
 """
+import json
 import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -1043,6 +1044,8 @@ TEMPLATE = """<!doctype html>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/assets/css/style.css" />
+<script type="application/ld+json">{{"@context": "https://schema.org", "@type": "Organization", "name": "Vtronix", "url": "https://www.vtronix.com", "foundingDate": "2001", "logo": "https://www.vtronix.com/assets/img/logo.png", "address": {{"@type": "PostalAddress", "postOfficeBoxNumber": "267096", "addressLocality": "Weston", "addressRegion": "FL", "postalCode": "33326", "addressCountry": "US"}}, "contactPoint": {{"@type": "ContactPoint", "telephone": "+1-305-471-7600", "email": "sales@vtronix.com", "contactType": "sales"}}}}</script>
+{item_schema}
 </head>
 <body class="section-white" style="background:#fff;">
 
@@ -1083,16 +1086,20 @@ TEMPLATE = """<!doctype html>
         </div>
 
         <div>
-          <span class="product-detail-tag">{brand}</span>
+          <span class="product-detail-tag">{brand}</span>{status_tag}
           <h1>{sku}</h1>
 
+{honeywell}
 {body}
 
 {docs}
 
+{used_in}
+{replaced}
           <a class="btn btn-light" href="/request-a-quote"><span>Request a Quote</span><span class="arrow">&rarr;</span></a>
         </div>
       </div>
+{related}
     </div>
 
   </div>
@@ -1103,13 +1110,18 @@ TEMPLATE = """<!doctype html>
     <div>
       <div class="footer-brand">VTRONIX<span class="reg">&reg;</span></div>
       <p>PO Box 267096,<br />Weston FL 33326</p>
+      <p style="margin-top:10px;">Miami Gardens, Florida<br />Operations and warehouse</p>
       <p><a href="mailto:sales@vtronix.com">sales@vtronix.com</a></p>
       <p><a href="tel:3054717600">305-471-7600</a></p>
     </div>
     <div>
       <h4>General</h4>
+      <a href="/custom-controls">Custom Controls</a>
+      <a href="/capabilities">Capabilities</a>
       <a href="/about">About</a>
       <a href="/factory">Factory</a>
+      <a href="/brands">Our Brands</a>
+      <a href="/certifications">Certifications</a>
       <a href="/links">Links</a>
       <a href="/contact-us">Contact Us</a>
     </div>
@@ -1127,6 +1139,13 @@ TEMPLATE = """<!doctype html>
       <a href="/category/temperature-controls">Temperature Controls</a>
       <a href="/category/all-products">All Products</a>
     </div>
+    <div>
+      <h4>Legal</h4>
+      <a href="/warranty-returns">Warranty and Returns</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+      <a href="/accessibility">Accessibility</a>
+    </div>
   </div>
 </footer>
 
@@ -1134,6 +1153,130 @@ TEMPLATE = """<!doctype html>
 </body>
 </html>
 """
+
+
+APPLICATION_BY_SLUG = {
+    "r200a": [("Air handler controls", "air-handlers")],
+    "r201": [("Air handler controls", "air-handlers")],
+    "r85a": [("Air handler controls", "air-handlers")],
+    "ahu-control": [("Air handler controls", "air-handlers")],
+    "cbx99100": [("Air handler controls", "air-handlers")],
+    "r60a": [("Air handler controls", "air-handlers")],
+    "tf85l-200": [("Fan coil controls and thermostats", "fan-coil-units")],
+    "t5575b-std": [("Fan coil controls and thermostats", "fan-coil-units")],
+    "te63m-001": [("Fan coil controls and thermostats", "fan-coil-units")],
+    "tf63m-001": [("Fan coil controls and thermostats", "fan-coil-units")],
+    "pi02": [("Fan coil controls and thermostats", "fan-coil-units")],
+    "pi03-aux": [("Fan coil controls and thermostats", "fan-coil-units")],
+    "pi04": [("Fan coil controls and thermostats", "fan-coil-units")],
+    "r401": [("Water source heat pump boards", "water-source-heat-pumps")],
+    "dt03plus-001": [("Mini split wired and wireless controls", "mini-splits")],
+    "dt04-hc-120": [("Mini split wired and wireless controls", "mini-splits")],
+    "dt05plus": [("Mini split wired and wireless controls", "mini-splits")],
+    "lcdwireii": [("Mini split wired and wireless controls", "mini-splits")],
+    "wlth-010": [("Mini split wired and wireless controls", "mini-splits")],
+    "kt-828-gold": [("Mini split wired and wireless controls", "mini-splits")],
+    "q-338-f": [("Mini split wired and wireless controls", "mini-splits")],
+    "cb600v": [("ECM motor control", "ecm-motor-control")],
+    "ew40030": [("ECM motor control", "ecm-motor-control")],
+    "ew40040": [("ECM motor control", "ecm-motor-control")],
+    "r650": [("ECM motor control", "ecm-motor-control")],
+    "hesk120v": [("Energy-saving controls for hotels and buildings", "energy-savings")],
+    "hesk220v": [("Energy-saving controls for hotels and buildings", "energy-savings")],
+    "i-save": [("Energy-saving controls for hotels and buildings", "energy-savings")],
+    "zone-control-ii": [("Energy-saving controls for hotels and buildings", "energy-savings")],
+}
+
+
+def build_item_schema(p):
+    brand_name = "Honeywell" if p["brand"] == "Honeywell" else "Vtronix"
+    product = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": p["sku"],
+        "sku": p["sku"],
+        "brand": {"@type": "Brand", "name": brand_name},
+        "url": "https://www.vtronix.com/product-page/" + p["slug"],
+    }
+    if p.get("image"):
+        product["image"] = "https://www.vtronix.com/assets/img/products/" + p["image"]
+    if p.get("description"):
+        product["description"] = p["description"]
+    breadcrumb = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.vtronix.com/"},
+            {"@type": "ListItem", "position": 2, "name": "All Products", "item": "https://www.vtronix.com/category/" + p["cat_query"]},
+            {"@type": "ListItem", "position": 3, "name": p["sku"]},
+        ],
+    }
+    tag = '<script type="application/ld+json">{}</script>'.format(json.dumps(product))
+    tag += '\n<script type="application/ld+json">{}</script>'.format(json.dumps(breadcrumb))
+    return tag
+
+
+def build_status_tag(p):
+    if p["slug"].endswith("-obsolete"):
+        return '<span class="product-detail-tag" style="background:#9a2020; margin-left:8px;">Discontinued</span>'
+    return '<span class="product-detail-tag" style="background:#2a7d2a; margin-left:8px;">Active</span>'
+
+
+def build_honeywell_notice(p):
+    if p["brand"] != "Honeywell":
+        return ""
+    return (
+        '        <div style="border:1px solid #ddd; border-radius:3px; padding:14px 16px; margin-bottom:24px; '
+        'background:#fafafa; font-size:13.5px; color:#555;">'
+        "Honeywell product, supplied by Vtronix. Not a Vtronix design."
+        "</div>"
+    )
+
+
+def build_used_in(p):
+    apps = APPLICATION_BY_SLUG.get(p["slug"])
+    if not apps:
+        return ""
+    links = "".join(
+        '<a href="/applications/{slug}" style="margin-right:16px;">{title} &rarr;</a>'.format(slug=slug, title=title)
+        for title, slug in apps
+    )
+    return '        <p class="section-label">Used in</p>\n        <p style="margin:0 0 28px;">{}</p>'.format(links)
+
+
+def build_replaced_notice(p):
+    if not p["slug"].endswith("-obsolete"):
+        return ""
+    return (
+        '        <div style="border:1px solid #ddd; border-radius:3px; padding:14px 16px; margin-bottom:24px; '
+        'background:#fafafa; font-size:14px;">'
+        'This item is discontinued. <a href="/request-a-quote">Contact us for a replacement &rarr;</a>'
+        "</div>"
+    )
+
+
+def build_related(p):
+    same_cat = [
+        o for o in PRODUCTS
+        if o["cat_query"] == p["cat_query"] and o["slug"] != p["slug"]
+    ][:3]
+    if not same_cat:
+        return ""
+    cards = "\n".join(
+        '        <a class="featured-card" style="border-color:#ddd; background:#fff;" href="/product-page/{slug}">'
+        '<div class="featured-thumb"><img src="/assets/img/products/{image}" alt="{sku} {brand}" loading="lazy" /></div>'
+        '<div class="featured-info" style="background:#fff;"><span class="tag" style="color:#4a9bdc;">{brand}</span>'
+        '<div class="name" style="color:#111;">{sku}</div></div></a>'.format(
+            slug=o["slug"], image=o["image"], sku=o["sku"], brand=o["brand"]
+        )
+        for o in same_cat
+    )
+    return (
+        '      <div style="margin-top:50px;">\n'
+        '        <p class="section-label" style="margin-bottom:16px;">Related products</p>\n'
+        '        <div class="featured-grid">\n{}\n        </div>\n'
+        "      </div>"
+    ).format(cards)
 
 
 def build_body(p):
@@ -1213,6 +1356,12 @@ def main():
             docs=build_docs(p),
             sidebar=build_sidebar(p),
             media=build_media(p),
+            item_schema=build_item_schema(p),
+            status_tag=build_status_tag(p),
+            honeywell=build_honeywell_notice(p),
+            used_in=build_used_in(p),
+            replaced=build_replaced_notice(p),
+            related=build_related(p),
         )
         out_path = os.path.join(OUT_DIR, p["slug"] + ".html")
         with open(out_path, "w") as f:

@@ -12,10 +12,17 @@ const pages = [
   ['/products.html', 'all-products'],
   ['/products.html?cat=control-boards', 'category-control-boards'],
   ['/products/w100-1.html', 'product-detail'],
+  ['/products/th6210u2001.html', 'product-detail-honeywell'],
+  ['/products/econo3-001-obsolete.html', 'product-detail-discontinued'],
   ['/custom-controls.html', 'custom-controls'],
   ['/applications.html', 'applications'],
+  ['/applications/air-handlers.html', 'application-detail'],
   ['/documentation.html', 'documentation'],
   ['/request-a-quote.html', 'request-a-quote'],
+  ['/capabilities.html', 'capabilities'],
+  ['/brands.html', 'brands'],
+  ['/certifications.html', 'certifications'],
+  ['/warranty-returns.html', 'warranty-returns'],
 ];
 const widths = [1440, 390];
 
