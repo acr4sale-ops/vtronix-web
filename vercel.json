@@ -1,0 +1,17 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {"source":"/index","destination":"/","permanent":true},
+    {"source":"/contact","destination":"/contact-us","permanent":true},
+    {"source":"/products","destination":"/category/all-products","permanent":true},
+    {"source":"/category/thermostats-residential","destination":"/category/residential-thermostats","permanent":true},
+    {"source":"/category/thermostats-commercial","destination":"/category/commercial-thermostats","permanent":true},
+    {"source":"/category/fan-coil-controls","destination":"/category/fan-coil-thermostats","permanent":true},
+    {"source":"/category/discontinued-items","destination":"/category/discontinued","permanent":true}
+  ],
+  "rewrites": [
+    {"source":"/category/:slug","destination":"/products.html"},
+    {"source":"/product-page/:slug","destination":"/products.html"}
+  ]
+}
