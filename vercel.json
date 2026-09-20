@@ -1,17 +1,45 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "buildCommand": "python3 scripts/generate-product-pages.py && python3 scripts/generate-sitemap.py",
+  "outputDirectory": ".",
   "redirects": [
-    {"source":"/index","destination":"/","permanent":true},
-    {"source":"/contact","destination":"/contact-us","permanent":true},
-    {"source":"/products","destination":"/category/all-products","permanent":true},
-    {"source":"/category/thermostats-residential","destination":"/category/residential-thermostats","permanent":true},
-    {"source":"/category/thermostats-commercial","destination":"/category/commercial-thermostats","permanent":true},
-    {"source":"/category/fan-coil-controls","destination":"/category/fan-coil-thermostats","permanent":true},
-    {"source":"/category/discontinued-items","destination":"/category/discontinued","permanent":true}
+    { "source": "/index", "destination": "/", "permanent": true },
+    { "source": "/contact", "destination": "/contact-us", "permanent": true },
+    { "source": "/contact-us/", "destination": "/contact-us", "permanent": true },
+    { "source": "/products", "destination": "/category/all-products", "permanent": true },
+    { "source": "/category/thermostats-residential", "destination": "/category/residential-thermostats", "permanent": true },
+    { "source": "/category/thermostats-commercial", "destination": "/category/commercial-thermostats", "permanent": true },
+    { "source": "/category/fan-coil-controls", "destination": "/category/fan-coil-thermostats", "permanent": true },
+    { "source": "/category/discontinued-items", "destination": "/category/discontinued", "permanent": true },
+    { "source": "/products/:slug", "destination": "/product-page/:slug", "permanent": true },
+    { "source": "/product-page/w100", "destination": "/product-page/w100-1", "permanent": true },
+    { "source": "/product-page/tb7980b1005", "destination": "/product-page/tb7980b1005-honeywell-zonepro-modulating-thermostat", "permanent": true },
+    { "source": "/product-page/econo3-001", "destination": "/product-page/econo3-001-obsolete", "permanent": true },
+    { "source": "/product-page/r200a-s3", "destination": "/product-page/r200a", "permanent": true },
+    { "source": "/product-page/rab-a24.11be3", "destination": "/product-page/rab-a24-11be3", "permanent": true },
+    { "source": "/product-page/r60b-45-s2", "destination": "/product-page/r60b-45-s2-r60bleads", "permanent": true },
+    { "source": "/product-page/r85a-001", "destination": "/product-page/r85a", "permanent": true },
+    { "source": "/product-page/te80sb-501", "destination": "/product-page/te80sb-501-obsolete", "permanent": true },
+    { "source": "/product-page/te86sb-501", "destination": "/product-page/te86sb-501-obsolete", "permanent": true },
+    { "source": "/product-page/tf65l-001", "destination": "/product-page/tf65l-001-obsolete", "permanent": true },
+    { "source": "/product-page/tf65l-002-std", "destination": "/product-page/tf65l-002-std-obsolete", "permanent": true },
+    { "source": "/product-page/tf65l-002-swp", "destination": "/product-page/tf65l-002-swp-obsolete", "permanent": true },
+    { "source": "/product-page/tf85l-10011", "destination": "/product-page/tf85l-10011-obsolete", "permanent": true },
+    { "source": "/product-page/tf85l-11011", "destination": "/product-page/tf85l-11011-obsolete", "permanent": true },
+    { "source": "/product-page/lakepro-1", "destination": "/product-page/vtronix-lakepro-1", "permanent": true },
+    { "source": "/product-page/32003796-001", "destination": "/product-page/32003796-001-honeywell-wallplate-cover-for-all-th8000-series-thermostats", "permanent": true },
+    { "source": "/product-page/50033847-001", "destination": "/product-page/50033847-001-honeywell-adapter-plate", "permanent": true },
+    { "source": "/:path*", "has": [{ "type": "host", "value": "vtronix.com" }], "destination": "https://www.vtronix.com/:path*", "permanent": true }
   ],
   "rewrites": [
-    {"source":"/category/:slug","destination":"/products.html"},
-    {"source":"/product-page/:slug","destination":"/products.html"}
+    { "source": "/category/:slug", "destination": "/products.html" },
+    { "source": "/product-page/:slug", "destination": "/products/:slug.html" }
+  ],
+  "headers": [
+    {
+      "source": "/manuals/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    }
   ]
 }
