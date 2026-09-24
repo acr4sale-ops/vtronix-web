@@ -53,6 +53,27 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  /* Reveal for the about strengths split (photo wipe, then staggered list) */
+  var strengthsSplit = document.querySelector(".strengths-split");
+  if (strengthsSplit) {
+    if ("IntersectionObserver" in window) {
+      var strengthsIo = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              strengthsSplit.classList.add("in-view");
+              strengthsIo.disconnect();
+            }
+          });
+        },
+        { threshold: 0.2 }
+      );
+      strengthsIo.observe(strengthsSplit);
+    } else {
+      strengthsSplit.classList.add("in-view");
+    }
+  }
+
   /* Scroll-driven parallax for the about facility photo */
   var parallaxPhoto = document.querySelector(".about-facility-photo");
   var parallaxLayer = document.querySelector(".about-facility-parallax");
