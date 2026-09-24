@@ -53,24 +53,24 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  /* Reveal for the about strengths split (photo wipe, then staggered list) */
-  var strengthsSplit = document.querySelector(".strengths-split");
-  if (strengthsSplit) {
+  /* Reveal for the about strengths showcase (photo zoom, then staggered cards) */
+  var strengthsShowcase = document.querySelector(".strengths-showcase");
+  if (strengthsShowcase) {
     if ("IntersectionObserver" in window) {
       var strengthsIo = new IntersectionObserver(
         function (entries) {
           entries.forEach(function (entry) {
             if (entry.isIntersecting) {
-              strengthsSplit.classList.add("in-view");
+              strengthsShowcase.classList.add("in-view");
               strengthsIo.disconnect();
             }
           });
         },
-        { threshold: 0.2 }
+        { threshold: 0.15 }
       );
-      strengthsIo.observe(strengthsSplit);
+      strengthsIo.observe(strengthsShowcase);
     } else {
-      strengthsSplit.classList.add("in-view");
+      strengthsShowcase.classList.add("in-view");
     }
   }
 
