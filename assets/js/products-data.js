@@ -108,21 +108,21 @@ var VTRONIX_PRODUCTS = [
 
 var VTRONIX_CATEGORIES = [
   { slug: "control-boards", label: "Control Boards" },
-  { slug: "thermostats-residential", label: "Thermostats - Residential" },
-  { slug: "thermostats-commercial", label: "Thermostats - Commercial" },
-  { slug: "fan-coil-controls", label: "Fan Coil Controls" },
+  { slug: "residential-thermostats", label: "Thermostats - Residential" },
+  { slug: "commercial-thermostats", label: "Thermostats - Commercial" },
+  { slug: "fan-coil-thermostats", label: "Fan Coil Controls" },
   { slug: "mini-split-controls", label: "Mini Split Controls" },
   { slug: "energy-savings", label: "Energy Savings" },
   { slug: "temperature-controls", label: "Temperature Controls" },
   { slug: "all-products", label: "All Products" },
-  { slug: "discontinued-items", label: "Discontinued Items" }
+  { slug: "discontinued", label: "Discontinued Items" }
 ];
 
 /* Explicit per-category display order, exactly as shown on vtronix.com.
    A SKU can appear in more than one list (Wix allows multi-category
    products), and its relative order can differ between the two —
    discontinued items are left out of their live category listing and
-   only ever appear under "discontinued-items" and "all-products". */
+   only ever appear under "discontinued" and "all-products". */
 var VTRONIX_CATEGORY_ORDER = {
   "control-boards": [
     "R200A/S3", "R201", "R85A-001",
@@ -132,17 +132,17 @@ var VTRONIX_CATEGORY_ORDER = {
     "R502",
     "R401"
   ],
-  "thermostats-residential": [
+  "residential-thermostats": [
     "LAKEPRO-1",
     "TH1110DH1003", "TH1110DV1009", "TH4110U2005", "TH5110D1022", "TH6210U2001",
     "TH6220D1028", "TH8110R1008", "TH8320R1003", "TH8321WF1001", "TH9320WF5003",
     "THP9045A1023", "32003796-001", "THP2400A1027W", "THP2400A1068"
   ],
-  "thermostats-commercial": [
+  "commercial-thermostats": [
     "TB7980B1005", "TB7980A1006", "TB6980A1007", "TB8575A1000", "TB6575A1000",
     "TC300B-G", "TC500A-N", "50033847-001"
   ],
-  "fan-coil-controls": [
+  "fan-coil-thermostats": [
     "TB7980B1005", "TF85L-200", "TF85L-201", "T5575B-STD",
     "TE63M-001", "TE63M-002", "TF63M-001", "TF63M-002",
     "PI02", "PI03-AUX", "PI04",
@@ -160,7 +160,7 @@ var VTRONIX_CATEGORY_ORDER = {
   "temperature-controls": [
     "W100", "T775A2009", "AHU Control", "FT101", "MSI", "Outdoor Control", "TC102", "W110", "Zone Control II"
   ],
-  "discontinued-items": [
+  "discontinued": [
     "ECONO3-001", "TE80SB-501", "TE86SB-501",
     "TF65L-001", "TF65L-002-STD", "TF65L-002-SWP", "TF85L-10011", "TF85L-11011"
   ]

@@ -1,17 +1,29 @@
 #!/usr/bin/env python3
 """
-Generates static product detail pages under products/<slug>.html from PRODUCTS below.
+Generates static product detail pages under product-page/<slug>.html (served at
+/product-page/<slug>, matching the live www.vtronix.com URLs) from PRODUCTS below.
 Run from anywhere: python3 scripts/generate-product-pages.py
 """
 import os
+import re
+import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_DIR = os.path.join(ROOT, "products")
+sys.path.insert(0, os.path.join(ROOT, "scripts"))
+from _seo import head_tags  # noqa: E402
+from _product_seo import product_description, product_title  # noqa: E402
+
+
+def _discontinued_skus():
+    """SKUs flagged `discontinued: true` in the catalog data (single source)."""
+    with open(os.path.join(ROOT, "assets", "js", "products-data.js")) as f:
+        return set(re.findall(r'sku: "([^"]+)"[^}]*discontinued: true', f.read()))
+OUT_DIR = os.path.join(ROOT, "product-page")
 
 PRODUCTS = [
     {
         "sku": "TB7980B1005",
-        "slug": "tb7980b1005",
+        "slug": "tb7980b1005-honeywell-zonepro-modulating-thermostat",
         "brand": "Honeywell",
         "image": "TB7980B1005.jpg",
         "features": [
@@ -34,7 +46,7 @@ PRODUCTS = [
             {"label": "Install Instructions", "href": "https://s3.amazonaws.com/s3.supplyhouse.com/product_files/TB7980B1005-Install.pdf"},
             {"label": "Product Overview", "href": "https://s3.amazonaws.com/s3.supplyhouse.com/product_files/TB7980B1005-Product-Overview.pdf"},
         ],
-        "cat_query": "thermostats-commercial",
+        "cat_query": "commercial-thermostats",
     },
     {
         "sku": "TH6210U2001",
@@ -46,11 +58,11 @@ PRODUCTS = [
         "docs": [
             {"label": "Brochure", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_46f28dee08b44caf845642687a5e4907.pdf"},
         ],
-        "cat_query": "thermostats-residential",
+        "cat_query": "residential-thermostats",
     },
     {
         "sku": "W100",
-        "slug": "w100",
+        "slug": "w100-1",
         "brand": "Air Conditioning Control",
         "image": "W100.jpg",
         "features": [],
@@ -107,7 +119,7 @@ PRODUCTS = [
             {"label": "Brochure", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_dd10112d23ee49a2a286350a704b21d6.pdf"},
             {"label": "Submittal Sheet", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_2d56eb49591547b6a0dd52b3a4939243.pdf"},
         ],
-        "cat_query": "fan-coil-controls",
+        "cat_query": "fan-coil-thermostats",
     },
     # --- Remaining 91 products, scraped from live vtronix.com product pages ---
     {
@@ -118,7 +130,7 @@ PRODUCTS = [
         "features": [],
         "description": "T4 Pro Programmable Thermostat, 1H/1C Heat Pump, 1H/1C Conventional, TH4110U2005.",
         "docs": [{"label": "Brochure", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_bdd56732ca7e407f8764618b56deeeaf.pdf"}],
-        "cat_query": "thermostats-residential",
+        "cat_query": "residential-thermostats",
     },
     {
         "sku": "TH1110DV1009",
@@ -128,7 +140,7 @@ PRODUCTS = [
         "features": [],
         "description": "Vertical PRO 1000 Non-Programmable Thermostat \u2013 Backlit, 1H/1C, Dual Powered.",
         "docs": [{"label": "Brochure", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_305db0a33dca4770927b427274a040c5.pdf"}, {"label": "Install Instructions", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_d048d1695de84961bc1b1c12adc3e154.pdf"}, {"label": "User Guide", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_0da6772d0e9143678c99fb21b1b8feea.pdf"}],
-        "cat_query": "thermostats-residential",
+        "cat_query": "residential-thermostats",
     },
     {
         "sku": "TH1110DH1003",
@@ -138,7 +150,7 @@ PRODUCTS = [
         "features": [],
         "description": "Horizontal PRO 1000 Non-Programmable Thermostat - Backlit, 1H/1C, Dual Powered.",
         "docs": [{"label": "Brochure", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_caef5d125da949ca80732d66af8b4329.pdf"}, {"label": "Product Overview", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_f5b6466daff04d709b86c66b698d7a40.pdf"}, {"label": "Install Instructions", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_6e905bb94f3b4b18ab782caae1e0b026.pdf"}],
-        "cat_query": "thermostats-residential",
+        "cat_query": "residential-thermostats",
     },
     {
         "sku": "TH5110D1022",
@@ -148,7 +160,7 @@ PRODUCTS = [
         "features": [],
         "description": "TH5110D1022 Honeywell Digital Thermostat.",
         "docs": [{"label": "User Guide", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_e5960db5effa41fe95c4cc388e562936.pdf"}, {"label": "Brochure", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_a5a6adb7f5334beeacab17bacc735a63.pdf"}, {"label": "Install Instructions", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_937675afc5614579bab518dacd3d5fd0.pdf"}],
-        "cat_query": "thermostats-residential",
+        "cat_query": "residential-thermostats",
     },
     {
         "sku": "TH6220D1028",
@@ -158,7 +170,7 @@ PRODUCTS = [
         "features": [],
         "description": "TH6220D1028 Honeywell Focuspro Programmable Thermostat.",
         "docs": [{"label": "Product Overview", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_07a0e78ae2bb44008aa4ebd972dd34b6.pdf"}, {"label": "Brochure", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_70139746b50244f19bfc82618b5a5a25.pdf"}, {"label": "User Guide", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_e32d83b2a6e54b1fbbc803caf5333869.pdf"}],
-        "cat_query": "thermostats-residential",
+        "cat_query": "residential-thermostats",
     },
     {
         "sku": "TH8110R1008",
@@ -168,7 +180,7 @@ PRODUCTS = [
         "features": [],
         "description": "TH8110R1008 Honeywell VisionPRO 8000 with RedLINK technology, Programmable, 1H/1C, Touchscreen Thermostat.",
         "docs": [{"label": "Brochure", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_d11c2005db394d538dd55044f866d197.pdf"}, {"label": "Product Overview", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_af3057f0acb04e1f8a7f6b3aa1ac74ab.pdf"}, {"label": "Install Instructions", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_af00460104784c9d93bda2fc2110a99d.pdf"}],
-        "cat_query": "thermostats-residential",
+        "cat_query": "residential-thermostats",
     },
     {
         "sku": "TH8320R1003",
@@ -178,7 +190,7 @@ PRODUCTS = [
         "features": [],
         "description": "TH8320R1003 Honeywell VisionPRO 8000 with RedLINK Technology. Stages up to 3 Heat / 2 Cool.",
         "docs": [{"label": "Brochure", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_f546b9feaf2c47d2a55e7dcb0261e600.pdf"}, {"label": "Product Overview", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_402b686973844969a9faef5a83b6f121.pdf"}, {"label": "Install Instructions", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_e3864b24a2234198af25965569e93eeb.pdf"}],
-        "cat_query": "thermostats-residential",
+        "cat_query": "residential-thermostats",
     },
     {
         "sku": "TH9320WF5003",
@@ -188,7 +200,7 @@ PRODUCTS = [
         "features": [],
         "description": "TH9320WF5003 Honeywell Wi-Fi 9000 color touch screen programmable thermostat (needs \"C\" wire).",
         "docs": [{"label": "User Guide", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_1e318f5e4b8a4edba49ca985b0a4db5a.pdf"}, {"label": "Install Instructions", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_32e8e17d8348404da31f7f514a73d2d8.pdf"}, {"label": "Brochure", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_4f9552ec46a44e0eaa50f352dc62b3bc.pdf"}],
-        "cat_query": "thermostats-residential",
+        "cat_query": "residential-thermostats",
     },
     {
         "sku": "TH8321WF1001",
@@ -198,7 +210,7 @@ PRODUCTS = [
         "features": [],
         "description": "TH8321WF1001 Honeywell Wi-Fi VisionPRO 8000 Programmable, 3H/2C, Touchscreen Thermostat (Needs \"C\" wire).",
         "docs": [{"label": "Brochure", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_c4e34484bba044bdac6753faeae4e238.pdf"}, {"label": "Product Overview", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_c7704f0df32e46f9b20c0e9178658336.pdf"}, {"label": "Install Instructions", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_d1e51de5bef84635b57df0f06229287d.pdf"}],
-        "cat_query": "thermostats-residential",
+        "cat_query": "residential-thermostats",
     },
     {
         "sku": "THP9045A1023",
@@ -208,7 +220,7 @@ PRODUCTS = [
         "features": [],
         "description": "THP9045A1023/U Honeywell Wiresaver Wiring Module for Wi-Fi and Prestige Thermostats.",
         "docs": [{"label": "Install Instructions", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_c580e7d02afe4588a0a383f0aa2d9419.pdf"}],
-        "cat_query": "thermostats-residential",
+        "cat_query": "residential-thermostats",
     },
     {
         "sku": "THP2400A1068",
@@ -218,7 +230,7 @@ PRODUCTS = [
         "features": [],
         "description": "THP2400A1068 Honeywell 6\" x 6\" White Coverplate for T Series Thermostats.",
         "docs": [],
-        "cat_query": "thermostats-residential",
+        "cat_query": "residential-thermostats",
     },
     {
         "sku": "THP2400A1027W",
@@ -228,7 +240,7 @@ PRODUCTS = [
         "features": [],
         "description": "THP2400A1027W Honeywell Cover Plate for TH9320WF5003.",
         "docs": [{"label": "Install Instructions", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_6ed677a825bf43d18f51cbda1453f1eb.pdf"}],
-        "cat_query": "thermostats-residential",
+        "cat_query": "residential-thermostats",
     },
     {
         "sku": "T6811DP08",
@@ -238,7 +250,7 @@ PRODUCTS = [
         "features": [],
         "description": "T6811DP08 Honeywell LCD Thermostat 120 VAC - 2 pipe Fancoil Control.",
         "docs": [{"label": "Download", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_5592f4c386d6421f9af640938a6924cf.pdf"}],
-        "cat_query": "thermostats-residential",
+        "cat_query": "residential-thermostats",
     },
     {
         "sku": "T775A2009",
@@ -248,7 +260,7 @@ PRODUCTS = [
         "features": [],
         "description": "Electronic Temperature Controller with 1 Temperature Input, 1 SPDT Relay, 1 Sensor Included.",
         "docs": [{"label": "Brochure", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_85018cfe90bd4309b2350401c3a0105a.pdf"}],
-        "cat_query": "thermostats-commercial",
+        "cat_query": "commercial-thermostats",
     },
     {
         "sku": "T6373B1148",
@@ -258,7 +270,7 @@ PRODUCTS = [
         "features": [],
         "description": None,
         "docs": [],
-        "cat_query": "thermostats-commercial",
+        "cat_query": "commercial-thermostats",
     },
     {
         "sku": "TC300B-G",
@@ -268,7 +280,7 @@ PRODUCTS = [
         "features": [],
         "description": "TC300 Commercial Thermostat.",
         "docs": [],
-        "cat_query": "thermostats-commercial",
+        "cat_query": "commercial-thermostats",
     },
     {
         "sku": "TC500A-N",
@@ -278,7 +290,7 @@ PRODUCTS = [
         "features": [],
         "description": "Commercial Connected Touchscreen Wireless Thermostat - 5H/3C Heat Pump, 3H/3C Conventional.",
         "docs": [{"label": "Brochure", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_e19d0e137ed241b494907f29790c575e.pdf"}, {"label": "Product Overview", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_76c513def033475bb2cfcf5f398ce1e6.pdf"}],
-        "cat_query": "thermostats-commercial",
+        "cat_query": "commercial-thermostats",
     },
     {
         "sku": "TB7980A1006",
@@ -288,7 +300,7 @@ PRODUCTS = [
         "features": [],
         "description": "TB7980A1006 Honeywell Zonepro Modulating Thermostat with 0-10 Vdc Control.",
         "docs": [],
-        "cat_query": "thermostats-commercial",
+        "cat_query": "commercial-thermostats",
     },
     {
         "sku": "TB6980A1007",
@@ -298,7 +310,7 @@ PRODUCTS = [
         "features": [],
         "description": "TB6980A1007 Honeywell Zonepro Floating Control Thermostat, Single Output.",
         "docs": [{"label": "Install Instructions", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_cf11289c01d942d59901d4ddb4db3727.pdf"}, {"label": "Product Overview", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_d8aae609d1e34f92bcc72b912f832900.pdf"}],
-        "cat_query": "thermostats-commercial",
+        "cat_query": "commercial-thermostats",
     },
     {
         "sku": "TB8575A1000",
@@ -308,7 +320,7 @@ PRODUCTS = [
         "features": [],
         "description": "TB8575A1000 Honeywell SuitePRO - 24 Vac, 2 or 4 Pipe 3-Speed Fan Coil T-Stat with Manual/Auto Heat or Cool Changeover.",
         "docs": [{"label": "Install Instructions", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_a49373f5e37c4d1ebdb04fbcf9d9ed05.pdf"}, {"label": "Brochure", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_b987b1d09ca04e59bbcf9445546ba34a.pdf"}, {"label": "Submittal Sheet", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_4dea70c9c0a14cfe95e2c738dc152b49.pdf"}],
-        "cat_query": "thermostats-commercial",
+        "cat_query": "commercial-thermostats",
     },
     {
         "sku": "TB6575B1000",
@@ -318,7 +330,7 @@ PRODUCTS = [
         "features": [],
         "description": "TB6575B1000 Honeywell SuitePRO- 120/240V, 3-Speed Fan Coil T-Stat with 2 or 4 Pipe Manual/Auto Heat/Cool Changeover.",
         "docs": [{"label": "Install Instructions", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_780aeae953974171a93070ab0df48198.pdf"}, {"label": "Brochure", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_c3e6fd85a8fa4c35a0607e630a738495.pdf"}, {"label": "Submittal Sheet", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_b22c7baa3bd74954adc7aa91747debdb.pdf"}],
-        "cat_query": "thermostats-commercial",
+        "cat_query": "commercial-thermostats",
     },
     {
         "sku": "TB6575A1000",
@@ -328,27 +340,27 @@ PRODUCTS = [
         "features": [],
         "description": "TB6575A1000 Honeywell SuitePRO- 120/240V, 3-Speed Fan Coil T-Stat with 2 or 4 Pipe Manual/Auto Heat/Cool Changeover.",
         "docs": [{"label": "Install Instructions", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_ab6ad30e376e436982851560cdbb67c4.pdf"}, {"label": "Brochure", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_11070c5d85604eca876716f6a4daa0b0.pdf"}, {"label": "Submittal Sheet", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_0d923ae546b444c396861b18810d902b.pdf"}],
-        "cat_query": "thermostats-commercial",
+        "cat_query": "commercial-thermostats",
     },
     {
         "sku": "32003796-001",
-        "slug": "32003796-001",
+        "slug": "32003796-001-honeywell-wallplate-cover-for-all-th8000-series-thermostats",
         "brand": "Honeywell",
         "image": "32003796-001.png",
         "features": [],
         "description": "Honeywell WallPlate Cover for all TH8000 series thermostats. Use With TH8000 VisionPRO\u00ae Series Thermostats. Item Type: Accessory. Color: Premier White. Wallplate: 7 7/8\" wide X 5 1/2\" tall.",
         "docs": [{"label": "Manual", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_25bab64af19c41a3985cf6c09622eb53.pdf"}],
-        "cat_query": "thermostats-commercial",
+        "cat_query": "commercial-thermostats",
     },
     {
         "sku": "50033847-001",
-        "slug": "50033847-001",
+        "slug": "50033847-001-honeywell-adapter-plate",
         "brand": "Honeywell",
         "image": "50033847-001.png",
         "features": [],
         "description": "Honeywell Adapter Plate. Used With: TB6575/TB8575 series fan coil thermostats to vertical, single or double-gang junction box.",
         "docs": [],
-        "cat_query": "thermostats-commercial",
+        "cat_query": "commercial-thermostats",
     },
     {
         "sku": "VCZAL1100",
@@ -358,7 +370,7 @@ PRODUCTS = [
         "features": [],
         "description": "3/4\" Female NPT VC Valve Assembly (4.7 Cv).",
         "docs": [{"label": "Brochure", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_ae727fd749ab4a02a333d0ddb6c2bdd7.pdf"}, {"label": "Submittal Sheet", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_543ec3b482b34049917c33d489dc5f46.pdf"}],
-        "cat_query": "fan-coil-controls",
+        "cat_query": "fan-coil-thermostats",
     },
     {
         "sku": "VC4013ZZ00",
@@ -368,7 +380,7 @@ PRODUCTS = [
         "features": [],
         "description": "Two Position, Valve Actuator, 6VA, 200-240 VAC, 50/60 HZ.",
         "docs": [],
-        "cat_query": "fan-coil-controls",
+        "cat_query": "fan-coil-thermostats",
     },
     {
         "sku": "VC8011ZZ00",
@@ -378,7 +390,7 @@ PRODUCTS = [
         "features": [],
         "description": "Two Position Low Volt Actuator for VC Series Valves, 24 VAC, 6 VA, 60 psi.",
         "docs": [{"label": "Submittal Sheet", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_f3d7f75e9c21478bae6bf0983d2f33fd.pdf"}],
-        "cat_query": "fan-coil-controls",
+        "cat_query": "fan-coil-thermostats",
     },
     {
         "sku": "V8043E1145",
@@ -388,7 +400,7 @@ PRODUCTS = [
         "features": [],
         "description": "3/4\" NPT Connection Zone Valve, normally closed, 3.5Cv (24v).",
         "docs": [{"label": "Product Overview", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_f67d67cd827e44b793d64811e52fd2f7.pdf"}, {"label": "Install Instructions", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_fefbf6cc6529470d95c04943f0341f1c.pdf"}],
-        "cat_query": "fan-coil-controls",
+        "cat_query": "fan-coil-thermostats",
     },
     {
         "sku": "VU52S2028",
@@ -398,7 +410,7 @@ PRODUCTS = [
         "features": [],
         "description": "Two-way Fan Coil Valve, 1/2 in. Sweat, 3.5 Cv.",
         "docs": [{"label": "Flow Rate Chart", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_f5d0562203194641bd40ccaceb9c2cc5.pdf"}, {"label": "Install Instructions", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_d799c2180fe549838307c25b99a060a6.pdf"}],
-        "cat_query": "fan-coil-controls",
+        "cat_query": "fan-coil-thermostats",
     },
     {
         "sku": "VU444A1007",
@@ -408,7 +420,7 @@ PRODUCTS = [
         "features": [],
         "description": "Two-Position Actuator for VU52 N.O. and VU54 Valve Bodies, 120V 60Hz.",
         "docs": [{"label": "Brochure", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_078773f28456442cb22cc08d50e6081c.pdf"}, {"label": "Install Instructions", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_bc22ddd683444aed9cf68396bfc92444.pdf"}],
-        "cat_query": "fan-coil-controls",
+        "cat_query": "fan-coil-thermostats",
     },
     {
         "sku": "TF63M-002",
@@ -418,7 +430,7 @@ PRODUCTS = [
         "features": [],
         "description": "TF63M Electronic Fan-Coil Thermostat, Cool Only, Horizontal - 3 Speed Fan control - Status Light - 220 VAC.",
         "docs": [{"label": "Download", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_d60781262d334e7f997b2492d75c3d83.pdf"}],
-        "cat_query": "fan-coil-controls",
+        "cat_query": "fan-coil-thermostats",
     },
     {
         "sku": "TF63M-001",
@@ -428,7 +440,7 @@ PRODUCTS = [
         "features": [],
         "description": "TF63M Electronic Fan-Coil Thermostat, Cool Only, Horizontal - 3 Speed Fan control - Status Light - 120 VAC.",
         "docs": [{"label": "Download", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_da0745767a5248be9183034ec5c10227.pdf"}],
-        "cat_query": "fan-coil-controls",
+        "cat_query": "fan-coil-thermostats",
     },
     {
         "sku": "TE63M-002",
@@ -438,7 +450,7 @@ PRODUCTS = [
         "features": [],
         "description": "TE63M Electronic Fan-Coil Thermostat, Cool Only, Vertical - 3 Speed Fan control- Status Light - 220 VAC.",
         "docs": [{"label": "Download", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_80f34a9445e84d4ca9a6c38fc28a88ff.pdf"}],
-        "cat_query": "fan-coil-controls",
+        "cat_query": "fan-coil-thermostats",
     },
     {
         "sku": "TE63M-001",
@@ -448,61 +460,61 @@ PRODUCTS = [
         "features": [],
         "description": "TE63M Electronic Fan-Coil Thermostat, Cool Only, Vertical - 3 Speed Fan control - Status Light - 120 VAC.",
         "docs": [{"label": "Download", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_da0745767a5248be9183034ec5c10227.pdf"}],
-        "cat_query": "fan-coil-controls",
+        "cat_query": "fan-coil-thermostats",
     },
     {
         "sku": "TF65L-001",
-        "slug": "tf65l-001",
+        "slug": "tf65l-001-obsolete",
         "brand": "Digital - 3 Speed Fan, On/Off",
         "image": "TF65L-001.jpg",
         "features": [],
         "description": "TF65L Digital Fan-coil Thermostat, Cool Only, Horizontal, No Time Delay, Deg C - 120 VAC.",
         "docs": [{"label": "Download", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_c3b26405568f43d3aba071fba02eac8d.pdf"}],
-        "cat_query": "fan-coil-controls",
+        "cat_query": "fan-coil-thermostats",
         "discontinued": True,
     },
     {
         "sku": "TF85L-11011",
-        "slug": "tf85l-11011",
+        "slug": "tf85l-11011-obsolete",
         "brand": "Digital - 3 Speed Fan, On/Off",
         "image": "TF85L-11011.jpg",
         "features": [],
         "description": "T201 Digital Fan-Coil Thermostat, Heat/Cool, Auto Changeover, Horizontal, No Time Delay, Deg F - 24 VAC.",
         "docs": [{"label": "Download", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_3678daf7e0b940e6afe9f28a9a88c84b.pdf"}],
-        "cat_query": "fan-coil-controls",
+        "cat_query": "fan-coil-thermostats",
         "discontinued": True,
     },
     {
         "sku": "TF85L-10011",
-        "slug": "tf85l-10011",
+        "slug": "tf85l-10011-obsolete",
         "brand": "Digital - 3 Speed Fan, On/Off",
         "image": "TF85L-10011.jpg",
         "features": [],
         "description": "T200 Digital Fan-Coil Thermostat, Heat/Cool, Auto Changeover, Horizontal, No Time Delay, Deg F - 24 VAC.",
         "docs": [{"label": "Download", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_b0bbe3fcc68a4b1aadcebc863e755edf.pdf"}],
-        "cat_query": "fan-coil-controls",
+        "cat_query": "fan-coil-thermostats",
         "discontinued": True,
     },
     {
         "sku": "TF65L-002-SWP",
-        "slug": "tf65l-002-swp",
+        "slug": "tf65l-002-swp-obsolete",
         "brand": "Digital - 3 Speed Fan, On/Off",
         "image": "TF65L-002-SWP.jpg",
         "features": [],
         "description": "TF65L Digital Fan-coil Thermostat, Cool Only/Sweep, Horizontal, 3 Minute Delay, Deg C - 200 VAC.",
         "docs": [{"label": "Download", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_de642e2753564cc2929bb21b9cb238d9.pdf"}],
-        "cat_query": "fan-coil-controls",
+        "cat_query": "fan-coil-thermostats",
         "discontinued": True,
     },
     {
         "sku": "TF65L-002-STD",
-        "slug": "tf65l-002-std",
+        "slug": "tf65l-002-std-obsolete",
         "brand": "Digital - 3 Speed Fan, On/Off",
         "image": "TF65L-002-STD.webp",
         "features": [],
         "description": "TF65L Digital Fan-Coil Thermostat, Cool Only, Horizontal, 3 Minute Delay, Deg C - 220 VAC.",
         "docs": [{"label": "Download", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_de642e2753564cc2929bb21b9cb238d9.pdf"}],
-        "cat_query": "fan-coil-controls",
+        "cat_query": "fan-coil-thermostats",
         "discontinued": True,
     },
     {
@@ -513,7 +525,7 @@ PRODUCTS = [
         "features": [],
         "description": "T5575B Digital Fancoil Thermostat, Backlit LCD, Heat/Cool, Heat Valve, No Time Delay, Deg C/F, 120-240 VAC.",
         "docs": [{"label": "Download", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_f2d4f7c8b79a44b8826bb2be5d366212.pdf"}],
-        "cat_query": "fan-coil-controls",
+        "cat_query": "fan-coil-thermostats",
     },
     {
         "sku": "TF85L-201",
@@ -523,7 +535,7 @@ PRODUCTS = [
         "features": [],
         "description": "T201 Digital Fan-Coil Thermostat, Heat/Cool, Auto Changeover, Horizontal, No Time Delay, Deg F - 24 VAC.",
         "docs": [{"label": "Download", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_38e1c9e7fc584e0d83566499bcd22aa3.pdf"}],
-        "cat_query": "fan-coil-controls",
+        "cat_query": "fan-coil-thermostats",
     },
     {
         "sku": "TF85L-200",
@@ -533,11 +545,11 @@ PRODUCTS = [
         "features": [],
         "description": "T200 Digital Fan-Coil Thermostat, Heat/Cool, Manual Changeover, Horizontal, No Time Delay, Deg F - 24 VAC.",
         "docs": [{"label": "Download", "href": "https://6a435fb3-c576-4667-9b8d-e7b49b78ed75.usrfiles.com/ugd/6a435f_fa431215c6c64bc5bce1c66e00332414.pdf"}],
-        "cat_query": "fan-coil-controls",
+        "cat_query": "fan-coil-thermostats",
     },
     {
         "sku": "ECONO3-001",
-        "slug": "econo3-001",
+        "slug": "econo3-001-obsolete",
         "brand": "Mini-Split Control Wired",
         "image": "ECONO3-001.jpg",
         "features": [],
@@ -798,7 +810,7 @@ PRODUCTS = [
     },
     {
         "sku": "RAB-A24.11BE3",
-        "slug": "rab-a24.11be3",
+        "slug": "rab-a24-11be3",
         "brand": "Air Conditioning Control",
         "image": "RAB-A24.11BE3.jpg",
         "features": [],
@@ -828,7 +840,7 @@ PRODUCTS = [
     },
     {
         "sku": "R60B-45/S2-R60BLEADS",
-        "slug": "r60b-45-s2-r60bleads",
+        "slug": "r60b-45-s2-r60bleads-1",
         "brand": "Fan Delay",
         "image": "R60B-45-S2-R60BLEADS.jpg",
         "features": [],
@@ -838,7 +850,7 @@ PRODUCTS = [
     },
     {
         "sku": "R60B-45/S2",
-        "slug": "r60b-45-s2",
+        "slug": "r60b-45-s2-r60bleads",
         "brand": "Fan Delay",
         "image": "R60B-45-S2.jpg",
         "features": [],
@@ -888,7 +900,7 @@ PRODUCTS = [
     },
     {
         "sku": "R200A/S3",
-        "slug": "r200a-s3",
+        "slug": "r200a",
         "brand": "AHU Control",
         "image": "R200A-S3.jpg",
         "features": [],
@@ -898,7 +910,7 @@ PRODUCTS = [
     },
     {
         "sku": "R85A-001",
-        "slug": "r85a-001",
+        "slug": "r85a",
         "brand": "AHU Control",
         "image": "R85A-001.jpg",
         "features": [],
@@ -958,7 +970,7 @@ PRODUCTS = [
     },
     {
         "sku": "LAKEPRO-1",
-        "slug": "lakepro-1",
+        "slug": "vtronix-lakepro-1",
         "brand": "Vtronix",
         "image": "LAKEPRO-1.png",
         "features": [],
@@ -968,7 +980,7 @@ PRODUCTS = [
     },
     {
         "sku": "TE86SB-501",
-        "slug": "te86sb-501",
+        "slug": "te86sb-501-obsolete",
         "brand": "Vtronix",
         "image": "TE86SB-501.jpg",
         "features": [],
@@ -979,7 +991,7 @@ PRODUCTS = [
     },
     {
         "sku": "TE80SB-501",
-        "slug": "te80sb-501",
+        "slug": "te80sb-501-obsolete",
         "brand": "Vtronix",
         "image": "TE80SB-501.jpg",
         "features": [],
@@ -1035,25 +1047,25 @@ TEMPLATE = """<!doctype html>
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>{sku} | Vtronix</title>
-<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+{head}
+<link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../assets/css/style.css" />
+<link rel="stylesheet" href="/assets/css/style.css" />
 </head>
 <body class="section-white" style="background:#fff;">
 
 <header class="site-header">
   <div class="wrap">
-    <a href="../index.html" class="logo"><img src="../assets/img/logo.png" alt="Vtronix" /></a>
+    <a href="/" class="logo"><img src="/assets/img/logo.png" alt="Vtronix" /></a>
     <nav class="main-nav">
-      <a href="../index.html">Home</a>
-      <a href="../factory.html">Factory</a>
-      <a href="../about.html">About Us</a>
-      <a href="../products.html" class="active">Products</a>
-      <a href="../links.html">Links</a>
-      <a href="../contact.html">Contact Us</a>
+      <a href="/">Home</a>
+      <a href="/factory">Factory</a>
+      <a href="/about">About Us</a>
+      <a href="/category/all-products" class="active">Products</a>
+      <a href="/links">Links</a>
+      <a href="/contact-us">Contact Us</a>
     </nav>
     <button class="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
   </div>
@@ -1071,7 +1083,7 @@ TEMPLATE = """<!doctype html>
 
     <div>
       <p class="breadcrumb">
-        <a href="../index.html">Home</a><span class="sep">/</span><a href="../products.html?cat={cat_query}">All Products</a><span class="sep">/</span><span class="current">{sku}</span>
+        <a href="/">Home</a><span class="sep">/</span><a href="/category/{cat_query}">All Products</a><span class="sep">/</span><span class="current">{sku}</span>
       </p>
 
       <div class="product-detail">
@@ -1087,7 +1099,7 @@ TEMPLATE = """<!doctype html>
 
 {docs}
 
-          <a class="btn btn-light" href="../contact.html"><span>Request a Quote</span><span class="arrow">&rarr;</span></a>
+          <a class="btn btn-light" href="/contact-us"><span>Request a Quote</span><span class="arrow">&rarr;</span></a>
         </div>
       </div>
     </div>
@@ -1105,29 +1117,29 @@ TEMPLATE = """<!doctype html>
     </div>
     <div>
       <h4>General</h4>
-      <a href="../about.html">About</a>
-      <a href="../factory.html">Factory</a>
-      <a href="../links.html">Links</a>
-      <a href="../contact.html">Contact Us</a>
+      <a href="/about">About</a>
+      <a href="/factory">Factory</a>
+      <a href="/links">Links</a>
+      <a href="/contact-us">Contact Us</a>
     </div>
     <div>
       <h4>Products</h4>
-      <a href="../products.html?cat=control-boards">Control Boards</a>
-      <a href="../products.html?cat=thermostats-residential">Residential Thermostats</a>
-      <a href="../products.html?cat=thermostats-commercial">Commercial Thermostats</a>
-      <a href="../products.html?cat=fan-coil-controls">Fan Coil Thermostats</a>
+      <a href="/category/control-boards">Control Boards</a>
+      <a href="/category/residential-thermostats">Residential Thermostats</a>
+      <a href="/category/commercial-thermostats">Commercial Thermostats</a>
+      <a href="/category/fan-coil-thermostats">Fan Coil Thermostats</a>
     </div>
     <div>
       <h4>&nbsp;</h4>
-      <a href="../products.html?cat=mini-split-controls">Mini Split Controls</a>
-      <a href="../products.html?cat=energy-savings">Energy Savings</a>
-      <a href="../products.html?cat=temperature-controls">Temperature Controls</a>
-      <a href="../products.html">All Products</a>
+      <a href="/category/mini-split-controls">Mini Split Controls</a>
+      <a href="/category/energy-savings">Energy Savings</a>
+      <a href="/category/temperature-controls">Temperature Controls</a>
+      <a href="/category/all-products">All Products</a>
     </div>
   </div>
 </footer>
 
-<script src="../assets/js/main.js"></script>
+<script src="/assets/js/main.js"></script>
 </body>
 </html>
 """
@@ -1142,21 +1154,21 @@ def build_body(p):
 
 CATEGORIES = [
     ("control-boards", "Control Boards"),
-    ("thermostats-residential", "Thermostats - Residential"),
-    ("thermostats-commercial", "Thermostats - Commercial"),
-    ("fan-coil-controls", "Fan Coil Controls"),
+    ("residential-thermostats", "Thermostats - Residential"),
+    ("commercial-thermostats", "Thermostats - Commercial"),
+    ("fan-coil-thermostats", "Fan Coil Controls"),
     ("mini-split-controls", "Mini Split Controls"),
     ("energy-savings", "Energy Savings"),
     ("temperature-controls", "Temperature Controls"),
     ("all-products", "All Products"),
-    ("discontinued-items", "Discontinued Items"),
+    ("discontinued", "Discontinued Items"),
 ]
 
 
 def build_sidebar(p):
     rows = []
     for slug, label in CATEGORIES:
-        href = "../products.html" if slug == "all-products" else "../products.html?cat=" + slug
+        href = "/category/" + slug
         cls = ' class="active"' if slug == p["cat_query"] else ""
         rows.append('        <li><a href="{href}"{cls}>{label}</a></li>'.format(href=href, cls=cls, label=label))
     return "\n".join(rows)
@@ -1173,7 +1185,7 @@ PLACEHOLDER_ICON = (
 
 def build_media(p):
     if p.get("image"):
-        return '          <img src="../assets/img/products/{}" alt="{} product photo" loading="lazy" />'.format(
+        return '          <img src="/assets/img/products/{}" alt="{} product photo" loading="lazy" />'.format(
             p["image"], p["sku"]
         )
     return "          " + PLACEHOLDER_ICON
@@ -1200,8 +1212,16 @@ def build_docs(p):
 
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
+    discontinued = _discontinued_skus()
     for p in PRODUCTS:
         html = TEMPLATE.format(
+            head=head_tags(
+                "/product-page/" + p["slug"],
+                product_title(p, p["sku"] in discontinued),
+                product_description(p, p["sku"] in discontinued),
+                og_type="product",
+                image="/assets/img/products/" + p["image"] if p.get("image") else None,
+            ),
             sku=p["sku"],
             brand=p["brand"],
             cat_query=p["cat_query"],

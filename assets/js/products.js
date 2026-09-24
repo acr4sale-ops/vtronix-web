@@ -4,8 +4,10 @@ document.addEventListener("DOMContentLoaded", function () {
   var searchInput = document.getElementById("productSearch");
   var catLinks = document.querySelectorAll(".shop-categories a");
 
-  var params = new URLSearchParams(window.location.search);
-  var activeCat = params.get("cat") || "all-products";
+  // Category comes from the page (category/<slug>.html sets data-cat) or the
+  // /category/<slug> path, matching the live site's URLs.
+  var pathMatch = window.location.pathname.match(/\/category\/([a-z0-9-]+)/);
+  var activeCat = document.body.dataset.cat || (pathMatch && pathMatch[1]) || "all-products";
 
   var icon =
     '<svg viewBox="0 0 24 24" fill="none" stroke="#5b6b78" stroke-width="1.4"><rect x="4" y="4" width="16" height="16" rx="2"/><circle cx="12" cy="12" r="3.2"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6L19 19M19 5l-1.4 1.4M6.4 17.6L5 19"/></svg>';
@@ -30,13 +32,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function setCategory(cat) {
     activeCat = cat;
-    var url = new URL(window.location.href);
-    if (activeCat === "all-products") {
-      url.searchParams.delete("cat");
-    } else {
-      url.searchParams.set("cat", activeCat);
-    }
-    window.history.replaceState({}, "", url);
+    window.history.replaceState({}, "", "/category/" + activeCat);
+    document.title = (categoryLabels[activeCat] || "All Products") + " | Vtronix";
     setActiveCategoryLink();
   }
 
@@ -63,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .map(function (p) {
         var detail = (window.VTRONIX_PRODUCT_DETAILS || {})[p.sku];
         var tag = detail ? "a" : "div";
-        var href = detail ? ' href="products/' + detail.slug + '.html"' : "";
+        var href = detail ? ' href="/product-page/' + detail.slug + '"' : "";
         var media = detail && detail.image
           ? '<img src="' + detail.image + '" alt="' + p.sku + ' product photo" loading="lazy" decoding="async" />'
           : icon;
@@ -117,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var cats = [];
         allMatches.forEach(function (p) {
           VTRONIX_CATEGORIES.forEach(function (c) {
-            if (c.slug === "all-products" || c.slug === "discontinued-items") return;
+            if (c.slug === "all-products" || c.slug === "discontinued") return;
             if ((categoryOrder[c.slug] || []).indexOf(p.sku) !== -1 && cats.indexOf(c.slug) === -1) {
               cats.push(c.slug);
             }
