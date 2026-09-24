@@ -128,23 +128,17 @@ document.addEventListener("DOMContentLoaded", function () {
       button.textContent = "Sending…";
       note.classList.remove("show", "error");
 
-      var ajaxUrl = form.action.replace("formsubmit.co/", "formsubmit.co/ajax/");
-
-      fetch(ajaxUrl, {
+      fetch(form.getAttribute("action"), {
         method: "POST",
-        body: new FormData(form),
-        headers: { Accept: "application/json" }
+        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+        headers: { "Content-Type": "application/json", Accept: "application/json" }
       })
         .then(function (res) {
-          if (!res.ok) throw new Error("Request failed");
-          return res.json();
+          return res.json().catch(function () { return {}; }).then(function (data) {
+            if (!res.ok || !data.ok) throw new Error(data.error || "Request failed");
+          });
         })
-        .then(function (data) {
-          // FormSubmit answers 200 even when it did not send (e.g. form not
-          // yet activated), so only a success flag counts as sent.
-          if (!data || String(data.success) !== "true") {
-            throw new Error((data && data.message) || "Not sent");
-          }
+        .then(function () {
           form.reset();
           form.hidden = true;
           thanks.hidden = false;
