@@ -112,6 +112,8 @@ document.addEventListener("DOMContentLoaded", function () {
   if (form) {
     var note = form.querySelector(".form-note");
     var button = form.querySelector(".send-btn");
+    var thanks = document.getElementById("formThanks");
+    var againBtn = thanks && thanks.querySelector(".form-again");
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -137,10 +139,16 @@ document.addEventListener("DOMContentLoaded", function () {
           if (!res.ok) throw new Error("Request failed");
           return res.json();
         })
-        .then(function () {
-          note.textContent = "Thanks — your message has been sent to our team. We'll get back to you soon.";
-          note.classList.add("show");
+        .then(function (data) {
+          // FormSubmit answers 200 even when it did not send (e.g. form not
+          // yet activated), so only a success flag counts as sent.
+          if (!data || String(data.success) !== "true") {
+            throw new Error((data && data.message) || "Not sent");
+          }
           form.reset();
+          form.hidden = true;
+          thanks.hidden = false;
+          thanks.focus();
         })
         .catch(function () {
           note.textContent = "Something went wrong sending your message. Please email us directly at sales@vtronix.com.";
@@ -151,5 +159,13 @@ document.addEventListener("DOMContentLoaded", function () {
           button.textContent = originalLabel;
         });
     });
+
+    if (againBtn) {
+      againBtn.addEventListener("click", function () {
+        thanks.hidden = true;
+        form.hidden = false;
+        form.querySelector("input:not([type=hidden]):not(.form-honey)").focus();
+      });
+    }
   }
 });

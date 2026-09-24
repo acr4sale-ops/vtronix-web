@@ -45,6 +45,7 @@
             <input type="hidden" name="_subject" value="New message from the Vtronix website" />
             <input type="hidden" name="_template" value="table" />
             <input type="hidden" name="_captcha" value="false" />
+            <input type="text" name="_honey" class="form-honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
             <div class="field-row">
               <div>
                 <label for="fname">First Name</label>
@@ -62,6 +63,14 @@
             <button type="submit" class="send-btn">Send</button>
             <p class="form-note" role="status" aria-live="polite"></p>
           </form>
+          <div class="form-thanks" id="formThanks" role="status" aria-live="polite" tabindex="-1" hidden>
+            <span class="form-thanks-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+            </span>
+            <h3>Thank you for your request</h3>
+            <p>Your message has been sent to our sales team. We'll get back to you as soon as possible.</p>
+            <button type="button" class="form-again">Send another message</button>
+          </div>
         </div>
       </div>
     </div>
