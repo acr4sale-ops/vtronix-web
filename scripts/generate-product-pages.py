@@ -3,6 +3,7 @@
 Generates static product detail pages under products/<slug>.html from PRODUCTS below.
 Run from anywhere: python3 scripts/generate-product-pages.py
 """
+import html
 import json
 import os
 
@@ -1037,8 +1038,14 @@ TEMPLATE = """<!doctype html>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{sku} | Vtronix</title>
-<meta name="description" content="{sku}, {brand}, from Vtronix. Specifications, documentation and ordering." />
+<meta name="description" content="{meta_desc}" />
 <link rel="canonical" href="https://www.vtronix.com/product-page/{slug}" />
+<meta property="og:type" content="product" />
+<meta property="og:site_name" content="Vtronix" />
+<meta property="og:title" content="{sku} | Vtronix" />
+<meta property="og:description" content="{meta_desc}" />
+<meta property="og:url" content="https://www.vtronix.com/product-page/{slug}" />
+<meta property="og:image" content="{og_image}" />
 <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1186,6 +1193,23 @@ APPLICATION_BY_SLUG = {
     "i-save": [("Energy-saving controls for hotels and buildings", "energy-savings")],
     "zone-control-ii": [("Energy-saving controls for hotels and buildings", "energy-savings")],
 }
+
+
+def build_meta_desc(p):
+    desc = (p.get("description") or "").strip()
+    if desc:
+        desc = "{} from Vtronix. {}".format(p["sku"], desc) if p["sku"].lower() not in desc.lower() else desc
+        if len(desc) > 155:
+            desc = desc[:152].rsplit(" ", 1)[0].rstrip(",.;:-") + "..."
+    else:
+        desc = "{}, {}, from Vtronix. Specifications, documentation and ordering.".format(p["sku"], p["brand"])
+    return html.escape(desc)
+
+
+def build_og_image(p):
+    if p.get("image"):
+        return "https://www.vtronix.com/assets/img/products/" + p["image"]
+    return "https://www.vtronix.com/assets/img/logo.png"
 
 
 def build_item_schema(p):
@@ -1351,6 +1375,8 @@ def main():
             sku=p["sku"],
             slug=p["slug"],
             brand=p["brand"],
+            meta_desc=build_meta_desc(p),
+            og_image=build_og_image(p),
             cat_query=p["cat_query"],
             body=build_body(p),
             docs=build_docs(p),
