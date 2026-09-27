@@ -34,7 +34,7 @@
   ],
   "rewrites": [
     { "source": "/category/:slug", "destination": "/products.html" },
-    { "source": "/product-page/:slug", "destination": "/products/:slug.html" }
+    { "source": "/product-page/:slug", "destination": "/products/:slug" }
   ],
   "headers": [
     {
