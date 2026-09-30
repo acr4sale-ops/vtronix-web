@@ -50,10 +50,11 @@
       <div>
         <p class="eyebrow form-eyebrow">Please fill out the form below:</p>
         <div class="contact-form">
-          <form id="contactForm" action="https://formsubmit.co/sales@vtronix.com" method="POST">
-            <input type="hidden" name="_subject" value="New message from the Vtronix website" />
-            <input type="hidden" name="_template" value="table" />
-            <input type="hidden" name="_captcha" value="false" />
+          <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="bb0a6b00-ee20-4419-a3b7-0e672880ad06" />
+            <input type="hidden" name="subject" value="New message from the Vtronix website" />
+            <input type="hidden" name="from_name" value="Vtronix Website" />
+            <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" autocomplete="off" />
             <div class="field-row">
               <div>
                 <label for="fname">First Name</label>
