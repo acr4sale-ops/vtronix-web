@@ -59,7 +59,16 @@
         <input type="text" id="productSearch" placeholder="Enter search term" />
         <button id="searchBtn" aria-label="Search">&#128269;</button>
       </div>
-      <p id="resultCount" style="color:#777; font-size:14px; margin:-18px 0 20px;"></p>
+      <div class="shop-toolbar">
+        <p id="resultCount" style="color:#777; font-size:14px; margin:0;"></p>
+        <label class="shop-sort">
+          <span>Sort by</span>
+          <select id="productSort">
+            <option value="relevance">Relevance</option>
+            <option value="az">A-Z</option>
+          </select>
+        </label>
+      </div>
 
       <div class="product-grid" id="productGrid"></div>
     </div>

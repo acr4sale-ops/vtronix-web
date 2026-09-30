@@ -23,6 +23,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   var categoryOrder = window.VTRONIX_CATEGORY_ORDER || {};
+  var sortSelect = document.getElementById("productSort");
+  var sortOrder = "relevance";
 
   function setActiveCategoryLink() {
     catLinks.forEach(function (a) {
@@ -52,6 +54,15 @@ document.addEventListener("DOMContentLoaded", function () {
   function filterByCategory(cat, q) {
     return productsInCategory(cat).filter(function (p) {
       return matchesQuery(p, q);
+    });
+  }
+
+  // "relevance" keeps each category's curated display order; "az" sorts by SKU,
+  // comparing digit runs numerically so e.g. R60 comes before R100.
+  function sortItems(items) {
+    if (sortOrder !== "az") return items;
+    return items.slice().sort(function (a, b) {
+      return a.sku.localeCompare(b.sku, undefined, { numeric: true, sensitivity: "base" });
     });
   }
 
@@ -90,6 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // that only happens on an explicit search (Enter / search button), see performSearch().
   function render(items, note) {
     if (!items) items = filterByCategory(activeCat, currentQuery());
+    items = sortItems(items);
     var countText = items.length + (items.length === 1 ? " product" : " products");
     if (note) {
       countText += ' <span style="color:var(--blue-dim); font-weight:600;">— ' + note + "</span>";
@@ -131,6 +143,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     render(items);
   }
+
+  sortSelect.addEventListener("change", function () {
+    sortOrder = sortSelect.value;
+    render();
+  });
 
   catLinks.forEach(function (a) {
     a.addEventListener("click", function (e) {
