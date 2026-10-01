@@ -114,6 +114,21 @@ document.addEventListener("DOMContentLoaded", function () {
     var button = form.querySelector(".send-btn");
     var thanks = document.getElementById("formThanks");
     var againBtn = thanks && thanks.querySelector(".form-again");
+    var captcha = form.querySelector(".cf-turnstile");
+
+    // Load Cloudflare Turnstile only once a site key has been filled in.
+    if (captcha && captcha.getAttribute("data-sitekey")) {
+      var captchaScript = document.createElement("script");
+      captchaScript.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+      captchaScript.async = true;
+      captchaScript.defer = true;
+      document.head.appendChild(captchaScript);
+    }
+
+    // Turnstile tokens are single-use, so get a fresh one after every attempt.
+    function resetCaptcha() {
+      if (captcha && window.turnstile) window.turnstile.reset(captcha);
+    }
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -135,7 +150,12 @@ document.addEventListener("DOMContentLoaded", function () {
       })
         .then(function (res) {
           return res.json().catch(function () { return {}; }).then(function (data) {
-            if (!res.ok || !data.ok) throw new Error(data.error || "Request failed");
+            if (!res.ok || !data.ok) {
+              var err = new Error(data.error || "Request failed");
+              // 400s carry a message meant for the visitor (e.g. remove links).
+              err.userMessage = res.status === 400 ? data.error : "";
+              throw err;
+            }
           });
         })
         .then(function () {
@@ -144,13 +164,14 @@ document.addEventListener("DOMContentLoaded", function () {
           thanks.hidden = false;
           thanks.focus();
         })
-        .catch(function () {
-          note.textContent = "Something went wrong sending your message. Please email us directly at sales@vtronix.com.";
+        .catch(function (err) {
+          note.textContent = err.userMessage || "Something went wrong sending your message. Please email us directly at sales@vtronix.com.";
           note.classList.add("show", "error");
         })
         .finally(function () {
           button.disabled = false;
           button.textContent = originalLabel;
+          resetCaptcha();
         });
     });
 

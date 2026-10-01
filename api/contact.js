@@ -5,8 +5,14 @@
 //   CONTACT_TO      optional  recipient, defaults to sales@vtronix.com
 //   CONTACT_FROM    optional  sender on a Resend-verified domain,
 //                             defaults to "Vtronix Website <website@vtronix.com>"
+//   TURNSTILE_SECRET_KEY  optional  Cloudflare Turnstile secret; when set, every
+//                             submission must carry a valid Turnstile token
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Links in any field: http(s)://, www., or a bare domain followed by a path
+// (e.g. "urlki.com/newslots"). Nearly all form spam carries one.
+const LINK_RE = /https?:\/\/|www\.|\b[a-z0-9-]+\.[a-z]{2,}\/\S/i;
 
 const LIMITS = { fname: 100, lname: 100, email: 254, message: 5000 };
 
@@ -21,6 +27,24 @@ function escapeHtml(value) {
 
 function clean(value, max) {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
+}
+
+async function verifyTurnstile(secret, token, ip) {
+  if (!token) return false;
+  try {
+    const params = new URLSearchParams({ secret: secret, response: token });
+    if (ip) params.append("remoteip", ip);
+    const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      body: params
+    });
+    const data = await response.json();
+    if (!data.success) console.warn("contact: Turnstile rejected", data["error-codes"]);
+    return data.success === true;
+  } catch (err) {
+    console.error("contact: Turnstile verify failed", err);
+    return false;
+  }
 }
 
 module.exports = async function handler(req, res) {
@@ -44,6 +68,25 @@ module.exports = async function handler(req, res) {
 
   if (!EMAIL_RE.test(email)) {
     return res.status(400).json({ ok: false, error: "A valid email address is required." });
+  }
+
+  if (LINK_RE.test(fname) || LINK_RE.test(lname) || LINK_RE.test(message)) {
+    return res.status(400).json({
+      ok: false,
+      error: "Please remove any links from your message and try again."
+    });
+  }
+
+  const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
+  if (turnstileSecret) {
+    const ip = String(req.headers["x-forwarded-for"] || "").split(",")[0].trim();
+    const human = await verifyTurnstile(turnstileSecret, clean(body["cf-turnstile-response"], 2048), ip);
+    if (!human) {
+      return res.status(400).json({
+        ok: false,
+        error: "We couldn't verify you're human. Please refresh the page and try again."
+      });
+    }
   }
 
   const apiKey = process.env.RESEND_API_KEY;
