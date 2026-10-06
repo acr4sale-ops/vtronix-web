@@ -1066,16 +1066,34 @@ a { color: inherit; text-decoration: none; }
   }
 }
 
+/* Same contrast as the other about copy once that copy has faded in:
+   white heading, light body. The shared scroll-reveal sets direct children
+   of a section to opacity 0 until they intersect; this block sits at the
+   bottom of the page, so keep it at full contrast instead of waiting. */
+.our-brands h2 {
+  color: #fff;
+}
+
+.our-brands .lead {
+  color: #d6d6d6;
+}
+
+.our-brands .reveal {
+  opacity: 1;
+  transform: none;
+}
+
 .our-brands a {
+  color: var(--blue-bright);
   text-decoration: underline;
-  text-decoration-color: rgba(255, 255, 255, 0.35);
+  text-decoration-color: var(--blue-bright);
   text-underline-offset: 4px;
   transition: color var(--dur) var(--ease), text-decoration-color var(--dur) var(--ease);
 }
 
 .our-brands a:hover {
-  color: var(--blue-bright);
-  text-decoration-color: var(--blue-bright);
+  color: #fff;
+  text-decoration-color: #fff;
 }
 
 .pagination {
