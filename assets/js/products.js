@@ -32,11 +32,18 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  function syncHeading() {
+    var heading = document.getElementById("categoryHeading");
+    if (!heading) return;
+    heading.textContent = categoryLabels[activeCat] || "All Products";
+  }
+
   function setCategory(cat) {
     activeCat = cat;
     window.history.replaceState({}, "", "/category/" + activeCat);
     document.title = (categoryLabels[activeCat] || "All Products") + " | Vtronix";
     setActiveCategoryLink();
+    syncHeading();
   }
 
   function matchesQuery(p, q) {
@@ -174,5 +181,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   setActiveCategoryLink();
+  syncHeading();
   render();
 });
