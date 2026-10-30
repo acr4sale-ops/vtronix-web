@@ -1334,6 +1334,15 @@ a { color: inherit; text-decoration: none; }
   background: var(--blue);
 }
 
+.product-copy {
+  color: #333;
+  font-size: 15.5px;
+  line-height: 1.65;
+  margin: 0 0 26px;
+}
+.product-copy p { margin: 0 0 12px; }
+.product-copy p:last-child { margin-bottom: 0; }
+
 .pdf-links {
   display: flex;
   flex-wrap: wrap;
