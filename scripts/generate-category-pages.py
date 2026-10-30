@@ -35,11 +35,7 @@ CATEGORY_INTROS = {
         "TH8110R1008 is a VisionPRO 8000 with RedLINK technology, programmable, 1H/1C, and a touchscreen. TH8320R1003 is a VisionPRO 8000 with RedLINK technology, with stages up to 3 heat / 2 cool. TH8321WF1001 is a Wi-Fi VisionPRO 8000, programmable, 3H/2C, and a touchscreen, and its page states that it needs a C wire. TH9320WF5003 is a Wi-Fi 9000 color touch screen programmable thermostat, and its page also states that it needs a C wire.",
         "THP9045A1023 is shown as THP9045A1023/U, a Honeywell Wiresaver wiring module for Wi-Fi and Prestige thermostats. 32003796-001 is a wallplate cover for all TH8000 series thermostats, for use with TH8000 VisionPRO series thermostats. The page lists it as an accessory in Premier White, 7 7/8 inches wide by 5 1/2 inches tall. THP2400A1027W is a Honeywell cover plate for TH9320WF5003. THP2400A1068 is a Honeywell 6 inch by 6 inch white coverplate for T series thermostats. Each card links to its product page. Those pages show the model, the brand label, a photo, and the wording above. They do not show a price. Use Request a Quote on a product page to ask Vtronix about a model.",
     ],
-    "mini-split-controls": [
-        "This page lists sixteen mini split controls. The cards label seven as Mini-Split Control Wireless and nine as Mini-Split Control Wired. The wireless models are KT-E03, KT-E08, KT-828 Gold, KT-S828 Silver, Q-338-F, Q-380EW, and XE8400A. KT-E03 is a mini split universal remote with 4000 codes, a large display, and One KEY. KT-E08 is a mini split universal remote with 6000 codes and an LCD display. KT-828 Gold and KT-S828 Silver are both described as mini split universal remotes with 2000 codes, a large display, and Deg C or F. Q-338-F is a mini split universal remote control in Deg F. Q-380EW is a mini split universal remote control in Deg C or F. XE8400A is listed as LCD5004-030, a wireless LCD control for mini-splits, described as remote LCD 5.2, cool only, with sweep, and a small board.",
-        "The wired models are DT03PLUS-001, DT04-HC-220, DT04-HC-120, DT04PLUS-001, DT05PLUS, DT05HW, LCDWIREII, WLTH-010, and WLTH-020. DT03PLUS-001 is also identified as XE8200A1007, a wired control for mini-splits with an LED display, cool only, with sweep, and a remote marked optional. DT04PLUS-001 is a wired control for mini-splits with an LED display, cool only, with sweep, and a remote marked optional. DT04-HC-120 and DT04-HC-220 are listed as wired mini-split controls. Each of those two product pages shows the model number as its description and does not add further specifications. DT05PLUS is a fan coil control with an LED display, cool only, with sweep, and a remote marked optional. DT05HW is a temperature and dehumidification control. LCDWIREII is a fan coil control with a backlit LCD display and a remote marked optional.",
-        "WLTH-010 and WLTH-020 are flush-mount fan coil controls with an LED, cool only, and a window sensor. WLTH-010 is 120 VAC and WLTH-020 is 220 VAC. Every card links to its product page, where the model, the wired or wireless label, the photo, and any download link are shown. Prices are not shown on these pages. Use Request a Quote on a product page to contact Vtronix.",
-    ],
+    # mini-split-controls uses structured copy in _intro_html, not this paragraph list.
     "fan-coil-thermostats": [
         "This page lists fan coil thermostats, floating and modulating controls, and fan coil valves and actuators. The ZonePRO cards are TB7980B1005, TB7980A1006, and TB6980A1007. TB7980A1006 is described as a ZonePRO modulating thermostat with 0-10 Vdc control. TB6980A1007 is a ZonePRO floating control thermostat with a single output. The TB7980B1005 page lists floating outputs for the T6980, proportional outputs for the T7980, a digital display in F or C with an output bar graph, PI control algorithms, vertical mounting, a two-hour night setback override, remote sensor capability, set point limits, a minimum damper open percentage, 12-second backlighting, and a two-year warranty.",
         "SuitePRO cards are TB8575A1000, TB6575A1000, and TB6575B1000. TB8575A1000 is 24 Vac, for 2-pipe or 4-pipe systems, with a 3-speed fan and manual or automatic heat or cool changeover. TB6575A1000 and TB6575B1000 are 120/240 V, 3-speed fan coil thermostats for 2-pipe or 4-pipe systems with manual or automatic heat/cool changeover. T6811DP08 is an LCD thermostat, 120 Vac, for 2-pipe fan coil control. T6373B1148 is listed with a Honeywell label. That product page does not add a specification sentence beyond the model number.",
@@ -74,7 +70,38 @@ CATEGORY_INTROS = {
 }
 
 
+MINI_SPLIT_INTRO = """<div class="category-intro" data-intro="mini-split-controls">
+        <p>Wireless remotes and wired controls for mini-split and fan coil units.</p>
+        <h2>Wireless mini-split remotes</h2>
+        <ul>
+          <li><a href="/product-page/kt-e03">KT-E03</a>. Universal remote, 4000 codes, large display, One KEY.</li>
+          <li><a href="/product-page/kt-e08">KT-E08</a>. Universal remote, 6000 codes, LCD.</li>
+          <li><a href="/product-page/kt-828-gold">KT-828 Gold</a>. Universal remote, 2000 codes, large display, °C/°F.</li>
+          <li><a href="/product-page/kt-s828-silver">KT-S828 Silver</a>. Universal remote, 2000 codes, large display, °C/°F.</li>
+          <li><a href="/product-page/q-338-f">Q-338-F</a>. Universal remote, °F.</li>
+          <li><a href="/product-page/q-380ew">Q-380EW</a>. Universal remote, °C/°F.</li>
+          <li><a href="/product-page/xe8400a">XE8400A</a> (LCD5004-030). Wireless LCD control, 5.2 in, cool only, sweep, small board.</li>
+        </ul>
+        <h2>Wired mini-split and fan coil controls</h2>
+        <ul>
+          <li><a href="/product-page/dt03plus-001">DT03PLUS-001</a> (XE8200A1007). LED, cool only, sweep, remote optional.</li>
+          <li><a href="/product-page/dt04plus-001">DT04PLUS-001</a>. LED, cool only, sweep, remote optional.</li>
+          <li><a href="/product-page/dt04-hc-120">DT04-HC-120</a>. Wired mini-split control.</li>
+          <li><a href="/product-page/dt04-hc-220">DT04-HC-220</a>. Wired mini-split control.</li>
+          <li><a href="/product-page/dt05plus">DT05PLUS</a>. Fan coil control, LED, cool only, sweep, remote optional.</li>
+          <li><a href="/product-page/dt05hw">DT05HW</a>. Temperature and dehumidification control.</li>
+          <li><a href="/product-page/lcdwireii">LCDWIREII</a>. Fan coil control, backlit LCD, remote optional.</li>
+          <li><a href="/product-page/wlth-010">WLTH-010</a> (120 VAC). Flush-mount fan coil control, LED, cool only, window sensor.</li>
+          <li><a href="/product-page/wlth-020">WLTH-020</a> (220 VAC). Flush-mount fan coil control, LED, cool only, window sensor.</li>
+        </ul>
+        <p>Prices are not shown online. Use Request a Quote on any product page to contact Vtronix.</p>
+      </div>
+      """
+
+
 def _intro_html(slug):
+    if slug == "mini-split-controls":
+        return MINI_SPLIT_INTRO
     paragraphs = CATEGORY_INTROS.get(slug)
     if not paragraphs:
         return ""
