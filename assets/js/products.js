@@ -106,7 +106,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Live filtering within the currently selected category. No category switching here —
   // that only happens on an explicit search (Enter / search button), see performSearch().
+  function syncIntro() {
+    var intros = document.querySelectorAll(".category-intro");
+    intros.forEach(function (el) {
+      el.hidden = el.getAttribute("data-intro") !== activeCat;
+    });
+  }
+
   function render(items, note) {
+    syncIntro();
     if (!items) items = filterByCategory(activeCat, currentQuery());
     items = sortItems(items);
     var countText = items.length + (items.length === 1 ? " product" : " products");

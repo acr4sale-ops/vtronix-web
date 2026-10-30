@@ -1,6 +1,7 @@
 """SEO titles/descriptions and the shared <head> tags for every page.
 Canonical URLs match the live www.vtronix.com structure."""
 import html as _html
+import json
 
 HOST = "https://www.vtronix.com"
 OG_IMAGE = HOST + "/assets/img/facility-exterior.jpg"
@@ -61,6 +62,41 @@ def head_tags(path, title, desc, og_type="website", image=None):
         '<meta property="og:image" content="{}" />'.format(image),
         '<meta name="twitter:card" content="summary_large_image" />',
     ])
+
+
+# Facts printed in the footer of every page. addressCountry is the country of
+# the Weston, FL mailing address shown there.
+ORGANIZATION = {
+    "@type": "Organization",
+    "@id": HOST + "/#organization",
+    "name": "Vtronix",
+    "url": HOST + "/",
+    "logo": HOST + "/assets/img/logo.png",
+    "email": "sales@vtronix.com",
+    "telephone": "305-471-7600",
+    "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "PO Box 267096",
+        "addressLocality": "Weston",
+        "addressRegion": "FL",
+        "postalCode": "33326",
+        "addressCountry": "US",
+    },
+}
+
+
+def jsonld_script(nodes):
+    """One JSON-LD block. `<` is escaped so a value cannot close the script tag."""
+    payload = json.dumps(
+        {"@context": "https://schema.org", "@graph": nodes},
+        ensure_ascii=False,
+        indent=2,
+    ).replace("<", "\\u003c")
+    return '<script type="application/ld+json">\n{}\n</script>'.format(payload)
+
+
+def organization_script():
+    return jsonld_script([ORGANIZATION])
 
 
 def set_head(page_html, tags):
