@@ -166,20 +166,20 @@ def main():
         )
         page = page.replace(
             search,
-            '<h1 id="categoryHeading" class="h3">{}</h1>\n      {}{}'.format(
-                html.escape(label), _intro_html(slug), search
+            '<h1 id="categoryHeading" class="h3">{}</h1>\n      {}'.format(
+                html.escape(label), search
             ),
             1,
         )
         if "application/ld+json" not in page:
             page = page.replace("</head>", organization_script() + "\n</head>", 1)
-        page = page.replace(
-            grid,
-            '<div class="product-grid" id="productGrid">\n        {}\n      </div>'.format(
-                "\n        ".join(cards)
-            ),
-            1,
+        grid_html = '<div class="product-grid" id="productGrid">\n        {}\n      </div>'.format(
+            "\n        ".join(cards)
         )
+        intro = _intro_html(slug).strip()
+        if intro:
+            grid_html += "\n" + intro
+        page = page.replace(grid, grid_html, 1)
         if page.count("<h1") != 1:
             raise SystemExit("{} would have {} h1 tags".format(slug, page.count("<h1")))
         out_path = os.path.join(OUT_DIR, slug + ".html")
