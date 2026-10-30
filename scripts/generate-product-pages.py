@@ -10,8 +10,8 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
-from _seo import head_tags  # noqa: E402
-from _product_seo import product_description, product_title  # noqa: E402
+from _seo import HOST, ORGANIZATION, head_tags, jsonld_script  # noqa: E402
+from _product_seo import CAT_LABELS, product_description, product_title  # noqa: E402
 
 
 def _discontinued_skus():
@@ -1052,7 +1052,8 @@ TEMPLATE = """<!doctype html>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/assets/css/style.css" />
+<link rel="stylesheet" href="/assets/css/style.min.css" />
+{jsonld}
 </head>
 <body class="section-white" style="background:#fff;">
 
@@ -1139,7 +1140,7 @@ TEMPLATE = """<!doctype html>
   </div>
 </footer>
 
-<script src="/assets/js/main.js"></script>
+<script src="/assets/js/main.min.js"></script>
 </body>
 </html>
 """
@@ -1210,6 +1211,54 @@ def build_docs(p):
     return '        <p class="section-label">Documentation</p>\n        <div class="pdf-links">\n{}\n        </div>'.format(links)
 
 
+def _page_description(p):
+    """Visible description only: the lead, or the feature list. No CTA, no extras."""
+    text = (p.get("description") or "").strip()
+    if text:
+        return re.sub(r"\s+", " ", text)
+    features = [f.strip() for f in p.get("features") or [] if f.strip()]
+    if features:
+        return ". ".join(features)
+    return ""
+
+
+def product_jsonld(p):
+    url = HOST + "/product-page/" + p["slug"]
+    product = {
+        "@type": "Product",
+        "name": p["sku"],
+        "sku": p["sku"],
+        "url": url,
+        "brand": {"@type": "Brand", "name": p["brand"]},
+        "category": CAT_LABELS[p["cat_query"]],
+    }
+    if p.get("image"):
+        product["image"] = HOST + "/assets/img/products/" + p["image"]
+    description = _page_description(p)
+    if description:
+        product["description"] = description
+    features = [f.strip() for f in p.get("features") or [] if f.strip()]
+    if features:
+        product["additionalProperty"] = [
+            {"@type": "PropertyValue", "name": "Feature", "value": feature}
+            for feature in features
+        ]
+    crumbs = {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": HOST + "/"},
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "All Products",
+                "item": HOST + "/category/" + p["cat_query"],
+            },
+            {"@type": "ListItem", "position": 3, "name": p["sku"], "item": url},
+        ],
+    }
+    return jsonld_script([ORGANIZATION, crumbs, product])
+
+
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
     discontinued = _discontinued_skus()
@@ -1222,6 +1271,7 @@ def main():
                 og_type="product",
                 image="/assets/img/products/" + p["image"] if p.get("image") else None,
             ),
+            jsonld=product_jsonld(p),
             sku=p["sku"],
             brand=p["brand"],
             cat_query=p["cat_query"],
