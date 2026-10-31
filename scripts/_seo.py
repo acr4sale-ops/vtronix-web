@@ -22,6 +22,12 @@ PAGES = {
     "contact-us.html": ("/contact-us",
         "Contact Vtronix | Sales, Quotes & Technical Support",
         "Questions, custom orders or technical support? Contact Vtronix at sales@vtronix.com or +1-305-471-7600, or send us a message and our team will reply."),
+    "control-system-for-hvac.html": ("/control-system-for-hvac",
+        "Control System for HVAC | Vtronix",
+        "A Vtronix control system for HVAC covers AHU boards, fan-delay boards, ECM interfaces, and chiller and temperature controls. Request a quote."),
+    "commercial-hvac-controls.html": ("/commercial-hvac-controls",
+        "Commercial HVAC Controls | Vtronix",
+        "Commercial HVAC controls include Honeywell ZonePRO and SuitePRO thermostats, TC500A-N, and Vtronix fan coil and hotel energy controls. Request a quote."),
 }
 
 CATEGORIES = {
