@@ -95,8 +95,38 @@ MINI_SPLIT_INTRO = """<div class="category-intro" data-intro="mini-split-control
           <li><a href="/product-page/wlth-020">WLTH-020</a> (220 VAC). Flush-mount fan coil control, LED, cool only, window sensor.</li>
         </ul>
         <p>Prices are not shown online. Use Request a Quote on any product page to contact Vtronix.</p>
+        <p>See <a href="/commercial-hvac-controls">commercial HVAC controls</a> for these wired mini-split and fan coil controls beside the hotel energy-savings kits.</p>
       </div>
       """
+
+
+# Raw HTML so a later regen keeps the guide links. Not counted in the 250-400
+# intro check, and not passed through html.escape.
+GUIDE_LINKS = {
+    "commercial-thermostats": [
+        'See <a href="/commercial-hvac-controls">commercial HVAC controls</a> for ZonePRO, SuitePRO, fan coil, and hotel energy-savings models.',
+        'See <a href="/hvac-automation-controls">HVAC automation controls</a> for the TC500A-N connected thermostat and the two-hour night setback on TB7980B1005.',
+    ],
+    "residential-thermostats": [
+        'See <a href="/hvac-automation-controls">HVAC automation controls</a> for the programmable and Wi-Fi thermostats on this page, including LAKEPRO-1, the T4 and T6 Pro models, FocusPRO, and the VisionPRO models.',
+    ],
+    "fan-coil-thermostats": [
+        'See <a href="/commercial-hvac-controls">commercial HVAC controls</a> for ZonePRO, SuitePRO, these fan coil thermostats, and the valves listed with them.',
+    ],
+    "energy-savings": [
+        'See <a href="/commercial-hvac-controls">commercial HVAC controls</a> for these kits beside the commercial thermostats, and <a href="/hvac-automation-controls">HVAC automation controls</a> for the occupancy and key-card behavior.',
+    ],
+    "control-boards": [
+        'See <a href="/control-system-for-hvac">control system for HVAC</a> for these boards together with the temperature controls.',
+        'See <a href="/custom-control-solutions">custom control solutions</a> for the application, specification, design and test, and production steps, including boards that are factory installed.',
+    ],
+    "temperature-controls": [
+        'See <a href="/control-system-for-hvac">control system for HVAC</a> for these controls with the AHU and fan boards. See <a href="/hvac-automation-controls">HVAC automation controls</a> for MSI, the W110 lead-lag control, and Zone Control II.',
+    ],
+    "all-products": [
+        'Longer write-ups of this catalog are the <a href="/control-system-for-hvac">control system for HVAC</a>, <a href="/commercial-hvac-controls">commercial HVAC controls</a>, <a href="/hvac-automation-controls">HVAC automation controls</a>, and <a href="/custom-control-solutions">custom control solutions</a>.',
+    ],
+}
 
 
 def _intro_html(slug):
@@ -108,7 +138,9 @@ def _intro_html(slug):
     words = sum(len(p.split()) for p in paragraphs)
     if not 250 <= words <= 400:
         raise SystemExit("{} intro is {} words; expected 250-400".format(slug, words))
-    body = "\n        ".join("<p>{}</p>".format(html.escape(p)) for p in paragraphs)
+    parts = ["<p>{}</p>".format(html.escape(p)) for p in paragraphs]
+    parts.extend("<p>{}</p>".format(p) for p in GUIDE_LINKS.get(slug, []))
+    body = "\n        ".join(parts)
     return (
         '<div class="category-intro" data-intro="{}">\n        {}\n      </div>\n      '.format(
             html.escape(slug, quote=True), body

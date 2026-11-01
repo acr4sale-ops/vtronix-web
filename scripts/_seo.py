@@ -28,6 +28,12 @@ PAGES = {
     "commercial-hvac-controls.html": ("/commercial-hvac-controls",
         "Commercial HVAC Controls | Vtronix",
         "Commercial HVAC controls include Honeywell ZonePRO and SuitePRO thermostats, TC500A-N, and Vtronix fan coil and hotel energy controls. Request a quote."),
+    "hvac-automation-controls.html": ("/hvac-automation-controls",
+        "HVAC Automation Controls | Vtronix",
+        "HVAC automation controls from Vtronix include programmable and Wi-Fi thermostats, zone and lead-lag controls, and hotel occupancy kits. Request a quote."),
+    "custom-control-solutions.html": ("/custom-control-solutions",
+        "Custom Control Solutions | Vtronix",
+        "Custom control solutions from Vtronix cover application, specification, design and test, and production of HVAC control boards. Request a quote."),
 }
 
 CATEGORIES = {
