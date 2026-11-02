@@ -1127,6 +1127,7 @@ TEMPLATE = """<!doctype html>
       <a href="/commercial-hvac-controls">Commercial HVAC Controls</a>
       <a href="/hvac-automation-controls">HVAC Automation Controls</a>
       <a href="/custom-control-solutions">Custom Control Solutions</a>
+      <a href="/oem-hvac-control-boards">OEM HVAC Control Boards</a>
     </div>
     <div>
       <h4>Products</h4>

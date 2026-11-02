@@ -34,6 +34,9 @@ PAGES = {
     "custom-control-solutions.html": ("/custom-control-solutions",
         "Custom Control Solutions | Vtronix",
         "Custom control solutions from Vtronix cover application, specification, design and test, and production of HVAC control boards. Request a quote."),
+    "oem-hvac-control-boards.html": ("/oem-hvac-control-boards",
+        "OEM HVAC Control Boards | Vtronix",
+        "OEM HVAC control boards from Vtronix cover factory-installed AHU boards, ECM motor interfaces, heater timing boards, and custom builds. Request a quote."),
 }
 
 CATEGORIES = {
