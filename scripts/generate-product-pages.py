@@ -1100,6 +1100,7 @@ TEMPLATE = """<!doctype html>
 
 {docs}
 
+{guide}
           <a class="btn btn-light" href="/contact-us"><span>Request a Quote</span><span class="arrow">&rarr;</span></a>
         </div>
       </div>
@@ -1122,6 +1123,10 @@ TEMPLATE = """<!doctype html>
       <a href="/factory">Factory</a>
       <a href="/links">Links</a>
       <a href="/contact-us">Contact Us</a>
+      <a href="/control-system-for-hvac">Control System for HVAC</a>
+      <a href="/commercial-hvac-controls">Commercial HVAC Controls</a>
+      <a href="/hvac-automation-controls">HVAC Automation Controls</a>
+      <a href="/custom-control-solutions">Custom Control Solutions</a>
     </div>
     <div>
       <h4>Products</h4>
@@ -1259,6 +1264,65 @@ def product_jsonld(p):
     return jsonld_script([ORGANIZATION, crumbs, product])
 
 
+def guide_note(slug):
+    """One sentence before Request a Quote. Empty when the product is not on a guide."""
+    link = '<a href="{href}" style="color:#245f8f;text-decoration:underline;">{label}</a>'
+    control = link.format(href="/control-system-for-hvac", label="control system for HVAC")
+    custom = link.format(href="/custom-control-solutions", label="custom control solutions")
+    commercial = link.format(href="/commercial-hvac-controls", label="commercial HVAC controls")
+    auto = link.format(href="/hvac-automation-controls", label="HVAC automation controls")
+    both = (
+        "See this board in the {control} and the factory steps in {custom}.".format(
+            control=control, custom=custom
+        )
+    )
+    groups = {
+        both: [
+            "r200a", "r201", "r100a", "r85a", "r60a", "r60b-45-s2-r60bleads",
+            "cbx02003", "cbx99100", "r502", "r401", "cb600v", "r650", "w100-1",
+            "rab-a24-11be3",
+        ],
+        "See this part in the {control} guide.".format(control=control): [
+            "ew40030", "ew40040", "r60bleads", "r60b-45-s2-r60bleads-1",
+        ],
+        "See this control with the boards in the {control} guide.".format(control=control): [
+            "t775a2009", "ahu-control", "ft101", "outdoor-control", "tc102",
+        ],
+        (
+            "See this control in the {control} guide and with the {auto} "
+            "for zone, lead-lag, and networked units."
+        ).format(control=control, auto=auto): ["msi", "w110", "zone-control-ii"],
+        "See this model with the other {commercial}.".format(commercial=commercial): [
+            "tb7980a1006", "tb6980a1007", "tb8575a1000", "tb6575a1000", "tb6575b1000",
+            "50033847-001-honeywell-adapter-plate", "tc300b-g", "t6811dp08",
+            "tf85l-200", "tf85l-201", "t5575b-std", "v8043e1145", "vczal1100",
+            "vczar1100", "te63m-001", "te63m-002", "tf63m-001", "tf63m-002",
+            "pi02", "pi03-aux", "pi04",
+        ],
+        (
+            "See this model with the other {commercial} and the {auto}."
+        ).format(commercial=commercial, auto=auto): [
+            "tb7980b1005-honeywell-zonepro-modulating-thermostat", "tc500a-n",
+            "hesk120v", "hesk220v", "i-save", "i-save1001", "i-save1002",
+        ],
+        "See this thermostat with the programmable and Wi-Fi models in {auto}.".format(auto=auto): [
+            "vtronix-lakepro-1", "th4110u2005", "th6210u2001", "th6220d1028",
+            "th8110r1008", "th8320r1003", "th8321wf1001", "th9320wf5003",
+        ],
+        "See the wired mini-split controls named with the {commercial}.".format(commercial=commercial): [
+            "wlth-010", "wlth-020",
+        ],
+    }
+    for sentence, slugs in groups.items():
+        if slug in slugs:
+            return (
+                '          <p style="margin:8px 0 22px; max-width:46em; line-height:1.6;">'
+                + sentence
+                + "</p>\n"
+            )
+    return ""
+
+
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
     discontinued = _discontinued_skus()
@@ -1279,6 +1343,7 @@ def main():
             docs=build_docs(p),
             sidebar=build_sidebar(p),
             media=build_media(p),
+            guide=guide_note(p["slug"]),
         )
         out_path = os.path.join(OUT_DIR, p["slug"] + ".html")
         with open(out_path, "w") as f:
